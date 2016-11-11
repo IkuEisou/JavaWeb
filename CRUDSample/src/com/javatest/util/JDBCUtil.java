@@ -4,9 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 public class JDBCUtil {
 	public Connection getCon() throws Exception{
 		Connection con = null;
