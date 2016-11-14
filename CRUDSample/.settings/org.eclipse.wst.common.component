@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="java_test">
+    <wb-module deploy-name="ValveManagementSys">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="context-root" value="java_test"/>
-        <property name="java-output-path" value="/java_test/build/classes"/>
+        <property name="java-output-path" value="/ValveManagementSys/build/classes"/>
+        <property name="context-root" value="ValveManagementSys"/>
     </wb-module>
 </project-modules>

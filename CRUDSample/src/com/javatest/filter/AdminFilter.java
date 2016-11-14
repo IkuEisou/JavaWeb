@@ -30,8 +30,8 @@ public class AdminFilter implements Filter {
 		res.setContentType("text/html;charset=utf-8");
 		HttpSession session = req.getSession();
 		String userLogin = (String)session.getAttribute("userLogin");
-		String loginType = (String)session.getAttribute("loginType");
-		if (userLogin == null || loginType == null || !loginType.equals("admin")) {
+
+		if (userLogin == null) {
 			PrintWriter out = res.getWriter();
 			out.print("<script>alert('Please log in.'); window.location='login.html' </script>");
 			out.flush();

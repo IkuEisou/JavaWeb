@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>内部用户管理</title>
+ <link rel="Stylesheet" type="text/css" href="css/login.css" />
+</head>
+<body>
+    <div class="panel datagrid" style="width: 100%;">
+        <div class="panel-header">
+            <div class="panel-title">内部用户列表</div>
+            <div class="panel-tool"></div>
+        </div>
+    </div>
+
+    <div class="functionarea">
+        <div class="searchrow">
+            <span class="line_title">条件检索</span>
+        </div>
+        <div class="searchrow">
+            <table style="margin-left: -3px;">
+                <tbody><tr>
+                    <td>用户登录名：</td>
+                    <td>
+                        <input type="text" id="LoginName">
+                    </td>
+                    <td>真实姓名：</td>
+                    <td>
+                        <input type="text" id="RealName">
+                    </td>
+                </tr>
+                <tr>
+                    <td>所属部门：</td>
+                    <td>
+                        <select id="dep">
+                        <option></option>
+                        <option value=jn>江南安全阀校验中心</option>
+                        <option value=jb>江北安全阀校验中心</option>
+                        <option value=tx>退休返聘</option>
+                        </select>
+                    </td>
+                    <td>所属角色：</td>
+                    <td>
+                        <select id="role">
+                        <option></option>
+                        <option value=admin>管理员</option>
+                        <option value=pt>普通员工</option>
+                        <option value=checker>检验员</option>
+                        <option value=reviewer>相关审批人员</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="searchrow">
+            <input type="button" id="btnQuery" class="normalbutton" value="查询" onclick="srhusr()">
+            <input type="button" id="btnAdd" class="normalbutton" value="新增" onclick="window.open('manage.html')">
+            <input type="button" id="btnUpdate" class="normalbutton" value="修改">
+            <input type="button" id="btnDelete" class="normalbutton" value="删除">
+        </div>
+        <div id="userlist" >
+        <table border="1">
+        <tr id="1row">
+        	<td> <input type="checkbox"></td>
+        	<td>系统登录名</td>
+	        <td>登录密码</td>
+	        <td>真实姓名</td>
+	        <td>部门</td>
+	        <td>角色</td>
+        </tr>
+        <tbody id="usrtb">
+        </tbody>
+        </table>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/jquery.js"></script> 
+	<script type="text/javascript" src="js/usrlist.js"></script>
+    </body>
+</html>

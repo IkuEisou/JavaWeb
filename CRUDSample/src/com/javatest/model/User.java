@@ -3,8 +3,10 @@ package com.javatest.model;
 public class User {
 	private String username;
 	private String password;
-	private int type;
-	private String salt;
+	private String real;
+	private String dep;
+	private String role;
+
 	public String getUsername() {
 		return username;
 	}
@@ -17,17 +19,22 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public int getType() {
-		return type;
+	public String getRole() {
+		return role;
 	}
-	public void setType(int type) {
-		this.type = type;
+	public void setRole(String role) {
+		this.role = role;
 	}
-	public String getSalt() {
-		return salt;
+	public String getDep() {
+		return dep;
 	}
-	public void setSalt(String salt) {
-		this.salt = salt;
+	public void setDep(String dep) {
+		this.dep = dep;
 	}
-	
+	public String getReal() {
+		return real;
+	}
+	public void setReal(String real) {
+		this.real = real;
+	}
 }

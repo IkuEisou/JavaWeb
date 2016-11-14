@@ -8,10 +8,13 @@ function loginCheck(){
 }
 
 function regist(){
-	var username = $("#id_add").val();
-	var password = $("#id_pass").val();
-	var token = $("#token").val();
-	if (username==""||password=="") {
+	var username = $("#id_add").val()
+	var password = $("#id_pass").val()
+	var realname = $("#id_real").val()
+	var dep = $("#id_dep").find("option:selected").text()
+	var role = $("#id_role").find("option:selected").text()
+
+	if (username=="" || password=="") {
 		alert("please input username and password");
 		return false;
 	}
@@ -23,7 +26,9 @@ function regist(){
 			flag:"regist",
 			username:username,
 			password:password,
-			token:token,
+			realname:realname,
+			dep:dep,
+			role:role
 		},
 		error: function(xhr, err){
 			alert('Error：' + err + '！')
@@ -36,12 +41,10 @@ function regist(){
 
 function deluser(){
 	var username = $("#id_de").val();
-	var token = $("#token").val();
 	if (username=="") {
 		alert("please input username");
 		return;
 	}
-	if(!confirm("confirm the deletion?")){ return flase;}
 	$.ajax({
 		type: 'POST',
 		url :'UserServlet',
@@ -49,7 +52,6 @@ function deluser(){
 		data:{
 			flag:"delete",
 			username:username,
-			token:token,
 		},
 		error: function(xhr,err){
 			alert('request failed:'+err+'!')
@@ -73,6 +75,9 @@ function onload(){
 				alert("please login.");
 				window.location.href="login.html";
 			}
+			next = document.getElementById("1row").nextSibling();
+			
 		}
 	});
 }
+

@@ -8,8 +8,9 @@ public class JDBCUtil {
 	public Connection getCon() throws Exception{
 		Connection con = null;
 		try {
-			Class.forName("org.postgresql.Driver");
-			con = DriverManager.getConnection("jdbc:postgresql://10.167.227.48:5432/testdb","postgres", "fnst1234");
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			con = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;"
+					+ "DatabaseName=devdb", "sa", "fnst_1234");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -1,17 +1,16 @@
 package com.javatest.dao;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import com.javatest.model.User;
 import com.javatest.util.JDBCUtil;
 
 public class UserDao {
-	private String usertable="javauser";
+	private String usertable="[user]";
 	public User login(User u) throws Exception{
-		PreparedStatement pstmt;
 		JDBCUtil jdbcUtil = new JDBCUtil();
 		Connection con = jdbcUtil.getCon();
 		String password = u.getPassword();
@@ -19,23 +18,23 @@ public class UserDao {
 			System.out.println("connection failed");
 			return null;
 		}else{
-			String sql = "select * from "+usertable+" where id= ?";
+			Statement stmt=con.createStatement();
+			String sql = "SELECT * FROM "+usertable+" WHERE name='"+u.getUsername()+"'";
 			try {
-				pstmt = con.prepareStatement(sql);
-				pstmt.setString(1, u.getUsername());
-				ResultSet rs = pstmt.executeQuery();
-				if(rs!=null){
-					if(rs.next()){
-						User user = new User();
-						user.setUsername(rs.getString("id"));
-						user.setPassword(rs.getString("pwd"));
-						user.setType(rs.getInt("type"));
-						if (password.equals(user.getPassword())) {
-							return user;
-						}
-					}
+				ResultSet rs = stmt.executeQuery(sql);
+				if(rs == null || !rs.next()){
+					return null;
 				}
-			return null;
+
+				User user = new User();
+				user.setUsername(rs.getString("name"));
+				user.setPassword(rs.getString("pwd"));
+				
+				if (password.equals(user.getPassword().trim())) {
+					return user;
+				}
+				else
+					return null;
 			} catch (SQLException e) {
 				e.printStackTrace();
 				return null;
@@ -46,17 +45,14 @@ public class UserDao {
 	}
 
 	public boolean addUser(User u){
-		PreparedStatement pstmt;
 		JDBCUtil jdbcUtil = new JDBCUtil();
 		try {
 			Connection con = jdbcUtil.getCon();
-			String sql = "insert into "+usertable+"(id,pwd,type,salt) values(?,?,?,?)";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, u.getUsername());
-			pstmt.setString(2, u.getPassword());
-			pstmt.setInt(3, u.getType());
-			pstmt.setString(4, u.getSalt());
-			int ok = pstmt.executeUpdate();
+			Statement stmt=con.createStatement();
+			String sql = "insert into "+usertable+"(name,pwd,real,dep,role) values('"+
+					u.getUsername()+"', "+u.getPassword()+", '"+u.getReal()+"', '"+u.getDep()
+					+"', '"+u.getRole()+"')";
+			int ok = stmt.executeUpdate(sql);
 			if(ok > 0 ){
 				return true;
 			}else{
@@ -69,16 +65,14 @@ public class UserDao {
 	}
 	
 	public boolean updateUser(User u){
-		PreparedStatement pstmt;
 		JDBCUtil jdbcUtil = new JDBCUtil();
 		try {
 			Connection con = jdbcUtil.getCon();
-			String sql = "update "+usertable+" set pwd=? , salt=?  where id=?";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, u.getPassword());
-			pstmt.setString(2, u.getSalt());
-			pstmt.setString(3, u.getUsername());
-			int ok = pstmt.executeUpdate();
+			String sql = "update "+usertable+" set pwd="+u.getPassword()
+					+","+"u.getReal"+","+"u.getDep"+","+"u.getRole"+
+					" where name='"+u.getUsername()+"'";
+			Statement stmt=con.createStatement();
+			int ok = stmt.executeUpdate(sql);
 			if(ok > 0 ){
 				return true;
 			}else{
@@ -91,14 +85,13 @@ public class UserDao {
 	}
 	
 	public boolean isExsit(User u){
-		PreparedStatement pstmt;
 		JDBCUtil jdbcUtil = new JDBCUtil();
 		try {
 			Connection con = jdbcUtil.getCon();
-			String sql = "select * from "+usertable+" where id=?";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, u.getUsername());
-			ResultSet rs = pstmt.executeQuery();
+			String sql = "select * from "+usertable+" where name='"
+					+u.getUsername()+"'";
+			Statement stmt=con.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
 			if(rs!=null && rs.next()){
 				return true;
 			}else{
@@ -111,14 +104,13 @@ public class UserDao {
 	}
 
 	public boolean deleteUser(User u) {
-		PreparedStatement pstmt;
 		JDBCUtil jdbcUtil = new JDBCUtil();
 		try {
 			Connection con = jdbcUtil.getCon();
-			String sql = "delete from "+usertable+" where id = ?";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, u.getUsername());
-			int ok = pstmt.executeUpdate();
+			String sql = "delete from "+usertable+" where name='"
+					+u.getUsername()+"'";
+			Statement stmt=con.createStatement();
+			int ok = stmt.executeUpdate(sql);
 			if(ok > 0 ){
 				return true;
 			}else{
@@ -129,27 +121,72 @@ public class UserDao {
 			return false;
 		}
 	}
-	public boolean isAdmin(User u){
-		PreparedStatement pstmt;
-		JDBCUtil jdbcUtil = new JDBCUtil();
+	
+	public User[] search(String keyword){
 		try {
+			JDBCUtil jdbcUtil = new JDBCUtil();
 			Connection con = jdbcUtil.getCon();
-			String sql = "select * from "+usertable+" where id=?";
-			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, u.getUsername());
-			ResultSet rs = pstmt.executeQuery();
-			if(rs!=null && rs.next()){
-				if(rs.getInt("type")==1){
-					return true;
-				}else{
-					return false;
+	
+			if (con != null) {
+				Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+				String sql = "SELECT * FROM "+usertable+keyword;
+
+				ResultSet rs = stmt.executeQuery(sql);
+				rs.last();
+				int rows = rs.getRow();
+				if(rows == 0){
+					return null;
 				}
-			}else{
-				return false;
+				User[] usrs = new User[rows];
+				rs.first();
+				for(int i = 0;i<rows;i++,rs.next()){
+					User user = new User();
+					user.setUsername(rs.getString("name").trim());
+					user.setPassword(rs.getString("pwd").trim());
+					user.setRole(rs.getString("role").trim());
+					user.setDep(rs.getString("dep").trim());
+					user.setReal(rs.getString("real").trim());
+					usrs[i] = user;
+				}
+				return usrs;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
+		}catch (Exception e) {
+				e.printStackTrace();
 		}
+		return null;
+	}
+	
+	public User[] searchAll(){
+		try {
+			JDBCUtil jdbcUtil = new JDBCUtil();
+			Connection con = jdbcUtil.getCon();
+	
+			if (con != null) {
+				Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+				String sql = "SELECT * FROM "+usertable;
+
+				ResultSet rs = stmt.executeQuery(sql);
+				rs.last();
+				int rows = rs.getRow();
+				if(rows == 0){
+					return null;
+				}
+				User[] usrs = new User[rows];
+				rs.first();
+				for(int i = 0;i<rows;i++,rs.next()){
+					User user = new User();
+					user.setUsername(rs.getString("name"));
+					user.setPassword(rs.getString("pwd"));
+					user.setRole(rs.getString("role"));
+					user.setDep(rs.getString("dep"));
+					user.setReal(rs.getString("real"));
+					usrs[i] = user;
+				}
+				return usrs;
+			}
+		}catch (Exception e) {
+				e.printStackTrace();
+		}
+		return null;
 	}
 }

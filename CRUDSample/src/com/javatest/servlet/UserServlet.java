@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import com.javatest.dao.UserDao;
 import com.javatest.model.User;
+import net.sf.json.JSONArray;
 
 @WebServlet("/UserServlet")
 public class UserServlet extends HttpServlet {
@@ -22,7 +23,7 @@ public class UserServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		if (session.getAttribute("userLogin")!=null && session.getAttribute("loginType")!=null && session.getAttribute("loginType").equals("admin")) {
+		if (session.getAttribute("userLogin")!=null) {
 			doPost(request, response);
 		}else{
 			response.sendRedirect("login.html");
@@ -46,50 +47,28 @@ public class UserServlet extends HttpServlet {
 				userLogin = userDao.login(u);
 				if(userLogin!=null){
 					session.setAttribute("userLogin", userLogin.getUsername());
-					if (userLogin.getType()==1) {
-						session.setAttribute("loginType", "admin");
-						response.sendRedirect("manage.jsp");
-					}else{
-						session.setAttribute("loginType", "common");
-						response.sendRedirect("CarShop.jsp");
-					}
+					session.setAttribute("pwdLogin", userLogin.getPassword());
+					response.sendRedirect("main.html");
 				}else{
 					response.getWriter().print("<script>alert('login failed.'); window.location='login.html' </script>");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}else if("logout".equals(flag)){
-			session.setAttribute("userLogin", null);
-			session.setAttribute("loginType", null);
-			response.sendRedirect("login.html");
-		}else if("checkLogin".equals(flag)){
-			PrintWriter out = null;
-			String jsonStr;
-			try {
-				if(session.getAttribute("userLogin")!=null && session.getAttribute("loginType")!=null && session.getAttribute("loginType").equals("admin")){
-					jsonStr = "{\"msg\":\"LOGIN\"}";
-				}else{
-					jsonStr = "{\"msg\":\"NOLOGIN\"}";
-				}
-			    out = response.getWriter();
-			    out.write(jsonStr);
-			    out.flush();
-			} catch (IOException e) {
-			    e.printStackTrace();
-			} finally {
-			    if (out != null) {
-			        out.close();
-			    }
-			}
 		}else if ("regist".equals(flag)) {
 			String jsonStr;
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
+			String real = request.getParameter("realname").trim();
+			String dep = request.getParameter("dep").trim();
+			String role = request.getParameter("role").trim();
 			User u = new User();
 			u.setUsername(username);
 			u.setPassword(password);
-			u.setType(0);
+			u.setDep(dep);
+			u.setReal(real);
+			u.setRole(role);
+			
 			if (userDao.isExsit(u)) {
 				if(userDao.updateUser(u)){
 					jsonStr = "{\"msg\":\"update success.\"}";
@@ -121,15 +100,83 @@ public class UserServlet extends HttpServlet {
 			User u = new User();
 			u.setUsername(username);
 			if (!userDao.isExsit(u)) {
-				jsonStr = "{\"msg\":\"userID does not exist.\"}";
-			}else if(userDao.isAdmin(u)){
-				jsonStr = "{\"msg\":\"admin can not be deleted.\"}";
+				jsonStr = "{\"msg\":\"username does not exist.\"}";
 			}else{
 				if (userDao.deleteUser(u)) {
 					jsonStr = "{\"msg\":\"delete success.\"}";
 				}else{
 					jsonStr = "{\"msg\":\"delete failed.\"}";
 				}
+			}
+			PrintWriter out = null;
+			try {
+			    out = response.getWriter();
+			    out.write(jsonStr);
+			    out.flush();
+			} catch (IOException e) {
+			    e.printStackTrace();
+			} finally {
+			    if (out != null) {
+			        out.close();
+			    }
+			}	
+		}else if ("srhall".equals(flag)){
+			String jsonStr = "{\"msg\":\"init user list failed.\"}";
+			User[] usrs = userDao.searchAll();
+			if(usrs.length != 0){
+				JSONArray jsa = JSONArray.fromObject(usrs);
+				jsonStr = jsa.toString();
+			}
+			PrintWriter out = null;
+			try {
+			    out = response.getWriter();
+			    out.write(jsonStr);
+			    out.flush();
+			} catch (IOException e) {
+			    e.printStackTrace();
+			} finally {
+			    if (out != null) {
+			        out.close();
+			    }
+			}	
+		}else if ("srh".equals(flag)){
+			String jsonStr = "{\"msg\":\"srh user list failed.\"}";
+			String username = request.getParameter("username").trim();
+			String realname = request.getParameter("realname").trim();
+			String dep = request.getParameter("dep").trim();
+			String role = request.getParameter("role").trim();
+			String keyword = "";
+			if(!username.isEmpty()){
+				keyword += " WHERE name='"+username+"' ";
+			}
+			if(!realname.isEmpty()){
+				if(!keyword.isEmpty()){
+					keyword += ",";
+				}else{
+					keyword += " WHERE ";
+				}
+				keyword += "real='"+realname+"'";
+			}
+			if(!dep.isEmpty()){
+				if(!keyword.isEmpty()){
+					keyword += ",";
+				}else{
+					keyword += " WHERE ";
+				}
+				keyword += "dep='"+dep+"'";
+			}
+			if(!role.isEmpty()){
+				if(!keyword.isEmpty()){
+					keyword += ",";
+				}else{
+					keyword += " WHERE ";
+				}
+				keyword += "role='"+role+"'";
+			}
+			User[] usrs = userDao.search(keyword);
+			if(usrs != null && usrs.length != 0){
+				JSONArray jsa = JSONArray.fromObject(usrs);
+				jsonStr = jsa.toString();
 			}
 			PrintWriter out = null;
 			try {
