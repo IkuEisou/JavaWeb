@@ -14,7 +14,7 @@ $(function(){
 		},
 		success: function(usrs){
 			for(var i=0; i < usrs.length; i++){
-				var usr = '<tr><td><input type="checkbox"></td>'+
+				var usr = '<tr><td><input type="checkbox" name="subBox"  id="cb'+i+'"></td>'+
 				'<td>'+usrs[i]["username"]+'</td>'+
 				'<td>'+usrs[i]["password"]+'</td>'+
 				'<td>'+usrs[i]["real"]+'</td>'+
@@ -24,6 +24,13 @@ $(function(){
 			}
 		}
 	});
+	 $("#checkAll").click(function() {
+         $('input[name="subBox"]').attr("checked",this.checked); 
+     });
+     var $subBox = $("input[name='subBox']");
+     $subBox.click(function(){
+         $("#checkAll").attr("checked",$subBox.length == $("input[name='subBox']:checked").length ? true : false);
+     });
 });
 
 function srhusr(){
@@ -48,7 +55,7 @@ function srhusr(){
 		success: function(usrs){
 			$("#usrtb").empty()
 			for(var i=0; i < usrs.length; i++){
-				var usr = '<tr><td><input type="checkbox"></td>'+
+				var usr = '<tr><td><input type="checkbox" name="subBox"  id=cb"'+i+'"></td>'+
 				'<td>'+usrs[i]["username"]+'</td>'+
 				'<td>'+usrs[i]["password"]+'</td>'+
 				'<td>'+usrs[i]["real"]+'</td>'+
@@ -58,4 +65,73 @@ function srhusr(){
 			}
 		}
 	});
+}
+
+function deluser(){
+	var checked = $("input[type='checkbox'][name='subBox']");
+	$(checked).each(function(){
+		if($(this).attr("checked")==true) 
+		{
+			var username = $(this).parent().next()[0].innerText;
+			if (username=="") {
+				alert("请勾选用户");
+				return;
+			}
+			$(this).parent().parent().remove();
+			$.ajax({
+				type: 'POST',
+				url :'UserServlet',
+				dataType:'json',
+				data:{
+					flag:"delete",
+					username:username,
+				},
+				error: function(xhr,err){
+					alert('request failed:'+err+'!')
+				},
+				success: function(data){
+					//alert(data.msg);
+				}
+			});
+		}
+	 });
+}
+
+function upduser(){
+	var checked = $("input[type='checkbox'][name='subBox']");
+	$(checked).each(function(){
+		if($(this).attr("checked")==true) 
+		{
+			var usr= $(this).parent().nextAll();
+			var username = usr[0].innerText;
+			var password = usr[1].innerText;
+			var realname = usr[2].innerText;
+			var dep = usr[3].innerText;
+			var role = usr[4].innerText;
+			if (username=="") {
+				alert("请勾选用户");
+				return;
+			}
+//			window.open('manage.html')
+			$.ajax({
+				type: 'post',
+				url :'UserServlet',
+				dataType:'json',
+				data:{
+					flag:"regist",
+					username:username,
+					password:password,
+					realname:realname,
+					dep:dep,
+					role:role
+				},
+				error: function(xhr,err){
+					alert('request failed:'+err+'!')
+				},
+				success: function(data){
+					//alert(data.msg);
+				}
+			});
+		}
+	 });
 }

@@ -39,29 +39,6 @@ function regist(){
 	});
 }
 
-function deluser(){
-	var username = $("#id_de").val();
-	if (username=="") {
-		alert("please input username");
-		return;
-	}
-	$.ajax({
-		type: 'POST',
-		url :'UserServlet',
-		dataType:'json',
-		data:{
-			flag:"delete",
-			username:username,
-		},
-		error: function(xhr,err){
-			alert('request failed:'+err+'!')
-		},
-		success: function(data){
-			alert(data.msg);
-		}
-	});
-}
-
 function onload(){
 	$.ajax({
 		type: 'POST',
@@ -75,7 +52,7 @@ function onload(){
 				alert("please login.");
 				window.location.href="login.html";
 			}
-			next = document.getElementById("1row").nextSibling();
+			
 			
 		}
 	});

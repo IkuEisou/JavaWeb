@@ -50,8 +50,8 @@ public class UserDao {
 			Connection con = jdbcUtil.getCon();
 			Statement stmt=con.createStatement();
 			String sql = "insert into "+usertable+"(name,pwd,real,dep,role) values('"+
-					u.getUsername()+"', "+u.getPassword()+", '"+u.getReal()+"', '"+u.getDep()
-					+"', '"+u.getRole()+"')";
+					u.getUsername()+"', "+u.getPassword()+", N'"+u.getReal()+"', N'"+u.getDep()
+					+"', N'"+u.getRole()+"')";
 			int ok = stmt.executeUpdate(sql);
 			if(ok > 0 ){
 				return true;

@@ -123,7 +123,7 @@ public class UserServlet extends HttpServlet {
 		}else if ("srhall".equals(flag)){
 			String jsonStr = "{\"msg\":\"init user list failed.\"}";
 			User[] usrs = userDao.searchAll();
-			if(usrs.length != 0){
+			if(usrs != null && usrs.length != 0){
 				JSONArray jsa = JSONArray.fromObject(usrs);
 				jsonStr = jsa.toString();
 			}

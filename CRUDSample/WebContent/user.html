@@ -55,13 +55,13 @@
         <div class="searchrow">
             <input type="button" id="btnQuery" class="normalbutton" value="查询" onclick="srhusr()">
             <input type="button" id="btnAdd" class="normalbutton" value="新增" onclick="window.open('manage.html')">
-            <input type="button" id="btnUpdate" class="normalbutton" value="修改">
-            <input type="button" id="btnDelete" class="normalbutton" value="删除">
+            <input type="button" id="btnUpdate" class="normalbutton" value="修改" onclick="upduser()">
+            <input type="button" id="btnDelete" class="normalbutton" value="删除" onclick="deluser()">
         </div>
         <div id="userlist" >
         <table border="1">
         <tr id="1row">
-        	<td> <input type="checkbox"></td>
+        	<td> <input type="checkbox" id="checkAll"></td>
         	<td>系统登录名</td>
 	        <td>登录密码</td>
 	        <td>真实姓名</td>
