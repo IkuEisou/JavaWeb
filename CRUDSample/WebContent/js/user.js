@@ -40,6 +40,29 @@ function regist(){
 }
 
 function onload(){
+	var username = $.getUrlVar('username')
+	var password = $.getUrlVar('password')
+	var realname = decodeURIComponent($.getUrlVar('realname'))
+	var dep = decodeURIComponent($.getUrlVar('dep'))
+	var role = decodeURIComponent($.getUrlVar('role'))
+	if(username != undefined && realname != undefined){
+		$("title")[0].innerHTML = "修改用户"
+		$("#topic")[0].innerHTML = "<B>修改用户</B>"
+		$("#id_add").val(username);
+		$("#id_pass").val(password);
+		$("#id_real").val(realname);
+
+		$('#id_dep option').each(function(){
+		    if( $(this)[0].innerHTML == dep){
+		    	$('#id_dep').attr('value', $(this).val())
+		     }
+		});
+		$('#id_role option').each(function(){
+		    if( $(this)[0].innerHTML == role){
+		    	$('#id_role').attr('value', $(this).val())
+		     }
+		});
+	}	
 	$.ajax({
 		type: 'POST',
 		url :'UserServlet',
@@ -58,3 +81,19 @@ function onload(){
 	});
 }
 
+$.extend({
+	  getUrlVars: function(){
+	    var vars = [], hash;
+	    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+	    for(var i = 0; i < hashes.length; i++)
+	    {
+	      hash = hashes[i].split('=');
+	      vars.push(hash[0]);
+	      vars[hash[0]] = hash[1];
+	    }
+	    return vars;
+	  },
+	  getUrlVar: function(name){
+	    return $.getUrlVars()[name];
+	  }
+	});

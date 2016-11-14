@@ -68,9 +68,9 @@ public class UserDao {
 		JDBCUtil jdbcUtil = new JDBCUtil();
 		try {
 			Connection con = jdbcUtil.getCon();
-			String sql = "update "+usertable+" set pwd="+u.getPassword()
-					+","+"u.getReal"+","+"u.getDep"+","+"u.getRole"+
-					" where name='"+u.getUsername()+"'";
+			String sql = "update "+usertable+" set pwd='"+u.getPassword()
+					+"', real=N'"+u.getReal()+"', dep=N'"+u.getDep()+"', role=N'"+u.getRole()+
+					"' where name='"+u.getUsername()+"'";
 			Statement stmt=con.createStatement();
 			int ok = stmt.executeUpdate(sql);
 			if(ok > 0 ){

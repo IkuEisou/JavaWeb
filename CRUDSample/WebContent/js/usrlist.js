@@ -112,26 +112,9 @@ function upduser(){
 				alert("请勾选用户");
 				return;
 			}
-//			window.open('manage.html')
-			$.ajax({
-				type: 'post',
-				url :'UserServlet',
-				dataType:'json',
-				data:{
-					flag:"regist",
-					username:username,
-					password:password,
-					realname:realname,
-					dep:dep,
-					role:role
-				},
-				error: function(xhr,err){
-					alert('request failed:'+err+'!')
-				},
-				success: function(data){
-					//alert(data.msg);
-				}
-			});
+			var url = 'manage.html?username='+username+'&password='+password+
+			'&realname='+encodeURIComponent(realname)+'&dep='+encodeURIComponent(dep)+'&role='+encodeURIComponent(role)
+			window.open(url)
 		}
 	 });
 }
