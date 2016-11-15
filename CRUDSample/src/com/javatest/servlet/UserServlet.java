@@ -21,7 +21,8 @@ public class UserServlet extends HttpServlet {
         super();
     }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		if (session.getAttribute("userLogin")!=null) {
 			doPost(request, response);
@@ -30,7 +31,8 @@ public class UserServlet extends HttpServlet {
 		}
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		UserDao userDao = new UserDao();
 		String flag = request.getParameter("flag");
@@ -121,8 +123,9 @@ public class UserServlet extends HttpServlet {
 			    }
 			}	
 		}else if ("srhall".equals(flag)){
+			String page = request.getParameter("page");
 			String jsonStr = "{\"msg\":\"init user list failed.\"}";
-			User[] usrs = userDao.searchAll();
+			User[] usrs = userDao.searchAll(page);
 			if(usrs != null && usrs.length != 0){
 				JSONArray jsa = JSONArray.fromObject(usrs);
 				jsonStr = jsa.toString();

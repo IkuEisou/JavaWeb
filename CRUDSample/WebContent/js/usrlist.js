@@ -2,12 +2,17 @@
  * 
  */
 $(function(){
+	var page = $.getUrlVar('page');
+	if(page==undefined){
+		page = 1;
+	}
 	$.ajax({
 		type: 'POST',
 		url :'UserServlet',
 		dataType:'json',
 		data:{
 			flag:"srhall",
+			page: page
 		},
 		error: function(xhr,err){
 			alert('request failed:'+err+'!')
@@ -20,7 +25,7 @@ $(function(){
 			
 			for(i = 0;i<numPages;i++) {
 				var pageNum = i + 1;
-				$('#nav').append('<a href="#" rel="'+i+'">'+pageNum+'</a> ');
+				$('#nav').append('<a href="user.html?page='+pageNum+'"'+' rel="'+i+'">'+pageNum+'</a> ');
 			}
 			
 			for(var i=0; i < usrs.length; i++){
@@ -33,24 +38,23 @@ $(function(){
 				$("#usrtb").append(usr)
 			}
 			
-			$('#usrtb tr').hide();
-			$('#usrtb tr:first').show();
-		    $('#usrtb tr').slice(0, rowsShown).show();  
+//			$('#usrtb tr').hide();
+//			$('#usrtb tr:first').show();
+//		    $('#usrtb tr').slice(0, rowsShown).show();  
 		    
-		    $('#nav a:first').addClass('active');
-		    $('#nav a').bind('click', function(){
-		    	$('#nav a').removeClass('active');
-		    	$(this).addClass('active');
-		    	var currPage = $(this).attr('rel');
-		    	var startItem = currPage * rowsShown;
-		    	var endItem = startItem + rowsShown;
-		    	
-		    	$('#usrtb tr').css('opacity','0.0').hide().slice(startItem, endItem).css(
-		    			'display','table-row').animate({opacity:1}, 300, function (){
-		    	
-		    });
-
-		    });
+//		    $('#nav a:first').addClass('active');
+//		    $('#nav a').bind('click', function(){
+//		    	$('#nav a').removeClass('active');
+//		    	$(this).addClass('active');
+//		    	var currPage = $(this).attr('rel');
+//		    	var startItem = currPage * rowsShown;
+//		    	var endItem = startItem + rowsShown;
+//		    	
+//		    	$('#usrtb tr').css('opacity','0.0').hide().slice(startItem, endItem).css(
+//		    			'display','table-row').animate({opacity:1}, 300, function (){
+//		    	
+//		    });
+//		    });
 		}
 	});
 	 $("#checkAll").click(function() {
@@ -147,3 +151,20 @@ function upduser(){
 		}
 	 });
 }
+
+$.extend({
+	  getUrlVars: function(){
+	    var vars = [], hash;
+	    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+	    for(var i = 0; i < hashes.length; i++)
+	    {
+	      hash = hashes[i].split('=');
+	      vars.push(hash[0]);
+	      vars[hash[0]] = hash[1];
+	    }
+	    return vars;
+	  },
+	  getUrlVar: function(name){
+	    return $.getUrlVars()[name];
+	  }
+	});
