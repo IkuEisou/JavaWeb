@@ -1,7 +1,7 @@
 /**
  * 
  */
-$(function(){  
+$(function(){
 	$.ajax({
 		type: 'POST',
 		url :'UserServlet',
@@ -13,6 +13,16 @@ $(function(){
 			alert('request failed:'+err+'!')
 		},
 		success: function(usrs){
+			$('#usrtb').after('<div id="nav"></div>');
+			var rowsShown = 1;
+			var rowsTotal = usrs.length;
+			var numPages = Math.round(rowsTotal/rowsShown);
+			
+			for(i = 0;i<numPages;i++) {
+				var pageNum = i + 1;
+				$('#nav').append('<a href="#" rel="'+i+'">'+pageNum+'</a> ');
+			}
+			
 			for(var i=0; i < usrs.length; i++){
 				var usr = '<tr><td><input type="checkbox" name="subBox"  id="cb'+i+'"></td>'+
 				'<td>'+usrs[i]["username"]+'</td>'+
@@ -22,6 +32,25 @@ $(function(){
 				'<td>'+usrs[i]["role"]+'</td>'+'</tr>'
 				$("#usrtb").append(usr)
 			}
+			
+			$('#usrtb tr').hide();
+			$('#usrtb tr:first').show();
+		    $('#usrtb tr').slice(0, rowsShown).show();  
+		    
+		    $('#nav a:first').addClass('active');
+		    $('#nav a').bind('click', function(){
+		    	$('#nav a').removeClass('active');
+		    	$(this).addClass('active');
+		    	var currPage = $(this).attr('rel');
+		    	var startItem = currPage * rowsShown;
+		    	var endItem = startItem + rowsShown;
+		    	
+		    	$('#usrtb tr').css('opacity','0.0').hide().slice(startItem, endItem).css(
+		    			'display','table-row').animate({opacity:1}, 300, function (){
+		    	
+		    });
+
+		    });
 		}
 	});
 	 $("#checkAll").click(function() {
