@@ -2,67 +2,13 @@
  * 
  */
 $(function(){
-	var page = $.getUrlVar('page');
-	if(page==undefined){
-		page = 1;
-	}
-	$.ajax({
-		type: 'POST',
-		url :'UserServlet',
-		dataType:'json',
-		data:{
-			flag:"srhall",
-			page: page
-		},
-		error: function(xhr,err){
-			alert('request failed:'+err+'!')
-		},
-		success: function(usrs){
-			$('#usrtb').after('<div id="nav"></div>');
-			var rowsShown = 1;
-			var rowsTotal = usrs.length;
-			var numPages = Math.round(rowsTotal/rowsShown);
-			
-			for(i = 0;i<numPages;i++) {
-				var pageNum = i + 1;
-				$('#nav').append('<a href="user.html?page='+pageNum+'"'+' rel="'+i+'">'+pageNum+'</a> ');
-			}
-			
-			for(var i=0; i < usrs.length; i++){
-				var usr = '<tr><td><input type="checkbox" name="subBox"  id="cb'+i+'"></td>'+
-				'<td>'+usrs[i]["username"]+'</td>'+
-				'<td>'+usrs[i]["password"]+'</td>'+
-				'<td>'+usrs[i]["real"]+'</td>'+
-				'<td>'+usrs[i]["dep"]+'</td>'+
-				'<td>'+usrs[i]["role"]+'</td>'+'</tr>'
-				$("#usrtb").append(usr)
-			}
-			
-//			$('#usrtb tr').hide();
-//			$('#usrtb tr:first').show();
-//		    $('#usrtb tr').slice(0, rowsShown).show();  
-		    
-//		    $('#nav a:first').addClass('active');
-//		    $('#nav a').bind('click', function(){
-//		    	$('#nav a').removeClass('active');
-//		    	$(this).addClass('active');
-//		    	var currPage = $(this).attr('rel');
-//		    	var startItem = currPage * rowsShown;
-//		    	var endItem = startItem + rowsShown;
-//		    	
-//		    	$('#usrtb tr').css('opacity','0.0').hide().slice(startItem, endItem).css(
-//		    			'display','table-row').animate({opacity:1}, 300, function (){
-//		    	
-//		    });
-//		    });
-		}
-	});
+	srhusr()
 	 $("#checkAll").click(function() {
-         $('input[name="subBox"]').attr("checked",this.checked); 
+         $('input[name="subBox"]').attr("checked",this.checked) 
      });
-     var $subBox = $("input[name='subBox']");
+     var $subBox = $("input[name='subBox']")
      $subBox.click(function(){
-         $("#checkAll").attr("checked",$subBox.length == $("input[name='subBox']:checked").length ? true : false);
+         $("#checkAll").attr("checked",$subBox.length == $("input[name='subBox']:checked").length ? true : false)
      });
 });
 
@@ -71,6 +17,12 @@ function srhusr(){
 	var realname = $("#RealName").val()
 	var dep = $("#dep").find("option:selected").text()
 	var role = $("#role").find("option:selected").text()
+	var page = $.getUrlVar('page')
+	
+	if(page==undefined){
+		page = 1;
+	}
+	
 	$.ajax({
 		type: 'POST',
 		url: 'UserServlet',
@@ -80,13 +32,25 @@ function srhusr(){
 			username:username,
 			realname:realname,
 			dep:dep,
-			role:role
+			role:role,
+			page: page
 		},
 		error: function(xhr, err){
 			alert('Error：' + err + '！')
 		},
 		success: function(usrs){
 			$("#usrtb").empty()
+			$("#nav").empty()
+			$('#usrtb').after('<div id="nav"></div>')
+			var rowsShown = 1
+			var rowsTotal = usrs.length
+			var numPages = Math.round(rowsTotal/rowsShown)
+			
+			for(i = 0;i<numPages;i++) {
+				var pageNum = i + 1
+				$('#nav').append('<a href="user.html?page='+pageNum+'"'+' rel="'+i+'">'+pageNum+'</a> ')
+			}
+			
 			for(var i=0; i < usrs.length; i++){
 				var usr = '<tr><td><input type="checkbox" name="subBox"  id=cb"'+i+'"></td>'+
 				'<td>'+usrs[i]["username"]+'</td>'+
@@ -101,16 +65,16 @@ function srhusr(){
 }
 
 function deluser(){
-	var checked = $("input[type='checkbox'][name='subBox']");
+	var checked = $("input[type='checkbox'][name='subBox']")
 	$(checked).each(function(){
 		if($(this).attr("checked")==true) 
 		{
-			var username = $(this).parent().next()[0].innerText;
+			var username = $(this).parent().next()[0].innerText
 			if (username=="") {
-				alert("请勾选用户");
+				alert("请勾选用户")
 				return;
 			}
-			$(this).parent().parent().remove();
+			$(this).parent().parent().remove()
 			$.ajax({
 				type: 'POST',
 				url :'UserServlet',
@@ -123,7 +87,7 @@ function deluser(){
 					alert('request failed:'+err+'!')
 				},
 				success: function(data){
-					//alert(data.msg);
+					//alert(data.msg)
 				}
 			});
 		}

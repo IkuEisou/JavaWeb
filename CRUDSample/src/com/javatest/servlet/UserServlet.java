@@ -136,27 +136,7 @@ public class UserServlet extends HttpServlet {
 			    if (out != null) {
 			        out.close();
 			    }
-			}	
-		}else if ("srhall".equals(flag)){
-			String page = request.getParameter("page");
-			String jsonStr = "{\"msg\":\"init user list failed.\"}";
-			User[] usrs = userDao.searchAll(page);
-			if(usrs != null && usrs.length != 0){
-				JSONArray jsa = JSONArray.fromObject(usrs);
-				jsonStr = jsa.toString();
 			}
-			PrintWriter out = null;
-			try {
-			    out = response.getWriter();
-			    out.write(jsonStr);
-			    out.flush();
-			} catch (IOException e) {
-			    e.printStackTrace();
-			} finally {
-			    if (out != null) {
-			        out.close();
-			    }
-			}	
 		}else if ("srh".equals(flag)){
 			String jsonStr = "{\"msg\":\"srh user list failed.\"}";
 			String username = request.getParameter("username").trim();
@@ -164,6 +144,7 @@ public class UserServlet extends HttpServlet {
 			String dep = request.getParameter("dep").trim();
 			String role = request.getParameter("role").trim();
 			String keyword = "";
+			String page = request.getParameter("page");
 			if(!username.isEmpty()){
 				keyword += " WHERE name='"+username+"' ";
 			}
@@ -173,7 +154,7 @@ public class UserServlet extends HttpServlet {
 				}else{
 					keyword += " WHERE ";
 				}
-				keyword += "real='"+realname+"'";
+				keyword += "real=N'"+realname+"'";
 			}
 			if(!dep.isEmpty()){
 				if(!keyword.isEmpty()){
@@ -181,7 +162,7 @@ public class UserServlet extends HttpServlet {
 				}else{
 					keyword += " WHERE ";
 				}
-				keyword += "dep='"+dep+"'";
+				keyword += "dep=N'"+dep+"'";
 			}
 			if(!role.isEmpty()){
 				if(!keyword.isEmpty()){
@@ -189,9 +170,9 @@ public class UserServlet extends HttpServlet {
 				}else{
 					keyword += " WHERE ";
 				}
-				keyword += "role='"+role+"'";
+				keyword += "role=N'"+role+"'";
 			}
-			User[] usrs = userDao.search(keyword);
+			User[] usrs = userDao.search(page, keyword);
 			if(usrs != null && usrs.length != 0){
 				JSONArray jsa = JSONArray.fromObject(usrs);
 				jsonStr = jsa.toString();

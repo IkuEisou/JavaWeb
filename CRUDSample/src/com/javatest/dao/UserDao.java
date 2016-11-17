@@ -122,14 +122,18 @@ public class UserDao {
 		}
 	}
 	
-	public User[] search(String keyword){
+	public User[] search(String page, String keyword){
 		try {
 			JDBCUtil jdbcUtil = new JDBCUtil();
 			Connection con = jdbcUtil.getCon();
-	
+			int pageNo = Integer.parseInt(page);
+			String isWhere = keyword.isEmpty() ? " Where " : " AND ";
+			
 			if (con != null) {
 				Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-				String sql = "SELECT * FROM "+usertable+keyword;
+				String sql = "SELECT TOP 2 * FROM "+usertable+keyword+isWhere+
+						"  ID NOT IN(SELECT TOP "+((pageNo - 1)*2)+" ID FROM "+usertable+keyword+
+						" ORDER BY ID) ORDER BY ID";
 
 				ResultSet rs = stmt.executeQuery(sql);
 				rs.last();
@@ -146,43 +150,6 @@ public class UserDao {
 					user.setRole(rs.getString("role").trim());
 					user.setDep(rs.getString("dep").trim());
 					user.setReal(rs.getString("real").trim());
-					usrs[i] = user;
-				}
-				return usrs;
-			}
-		}catch (Exception e) {
-				e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public User[] searchAll(String page){
-		try {
-			JDBCUtil jdbcUtil = new JDBCUtil();
-			Connection con = jdbcUtil.getCon();
-			int pageNo = Integer.parseInt(page);
-			if (con != null) {
-				Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-//				String sql = "SELECT * FROM "+usertable; 
-				String sql = "SELECT TOP 2 * FROM "+usertable +
-						" WHERE ID NOT IN(SELECT TOP "+((pageNo - 1)*2)+" ID FROM "+usertable+
-						" ORDER BY ID) ORDER BY ID";
-
-				ResultSet rs = stmt.executeQuery(sql);
-				rs.last();
-				int rows = rs.getRow();
-				if(rows == 0){
-					return null;
-				}
-				User[] usrs = new User[rows];
-				rs.first();
-				for(int i = 0;i<rows;i++,rs.next()){
-					User user = new User();
-					user.setUsername(rs.getString("name"));
-					user.setPassword(rs.getString("pwd"));
-					user.setRole(rs.getString("role"));
-					user.setDep(rs.getString("dep"));
-					user.setReal(rs.getString("real"));
 					usrs[i] = user;
 				}
 				return usrs;
