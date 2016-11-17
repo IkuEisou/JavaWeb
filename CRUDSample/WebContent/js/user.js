@@ -5,6 +5,28 @@ function loginCheck(){
 		alert("please input username and password");
 		return false;
 	}
+	$.ajax({
+		type: 'POST',
+		url: 'UserServlet',
+		dataType: 'json',
+		data: {
+			flag:"login",
+			username:username,
+			password:password
+		},
+		error: function(xhr, err){
+			alert('Error：' + err + '！')
+			window.location.href="login.html";
+		},
+		success: function(data){
+			if(data.status == 200){
+				window.location.href=data.msg;
+			}
+			else{
+				alert(data.msg);	
+			}
+		}
+	});
 }
 
 function regist(){

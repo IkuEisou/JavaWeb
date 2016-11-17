@@ -39,6 +39,7 @@ public class UserServlet extends HttpServlet {
 		if (flag==null || "".equals(flag)) {
 			response.sendRedirect("login.html");
 		}else if("login".equals(flag)){
+			String jsonStr;
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
 			User u = new User();
@@ -50,10 +51,24 @@ public class UserServlet extends HttpServlet {
 				if(userLogin!=null){
 					session.setAttribute("userLogin", userLogin.getUsername());
 					session.setAttribute("pwdLogin", userLogin.getPassword());
-					response.sendRedirect("main.html");
+					jsonStr = "{\"msg\":\"main.html\",\"status\":200}";
+//					response.sendRedirect("main.html");
 				}else{
-					response.getWriter().print("<script>alert('login failed.'); window.location='login.html' </script>");
+//					response.getWriter().print("<script>alert('login failed.'); window.location='login.html' </script>");
+					jsonStr = "{\"msg\":\"invalid user/password.\",\"status\":302}";
 				}
+				PrintWriter out = null;
+				try {
+				    out = response.getWriter();
+				    out.write(jsonStr);
+				    out.flush();
+				} catch (IOException e) {
+				    e.printStackTrace();
+				} finally {
+				    if (out != null) {
+				        out.close();
+				    }
+				}	
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
