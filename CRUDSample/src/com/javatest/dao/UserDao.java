@@ -8,6 +8,8 @@ import java.sql.Statement;
 import com.javatest.model.User;
 import com.javatest.util.JDBCUtil;
 
+import net.sf.json.JSONArray;
+
 public class UserDao {
 	private String usertable="[user]";
 	public User login(User u) throws Exception{
@@ -122,7 +124,7 @@ public class UserDao {
 		}
 	}
 	
-	public User[] search(String page, String keyword){
+	public String search(String page, String keyword){
 		try {
 			JDBCUtil jdbcUtil = new JDBCUtil();
 			Connection con = jdbcUtil.getCon();
@@ -152,7 +154,22 @@ public class UserDao {
 					user.setReal(rs.getString("real").trim());
 					usrs[i] = user;
 				}
-				return usrs;
+				
+				sql = "SELECT COUNT(*) FROM "+usertable+keyword;
+				rs = stmt.executeQuery(sql);
+				int recordCount = 0;
+			      if (rs.next()) 
+			      {
+			              recordCount = rs.getInt(1);
+			       }
+				String pages = Integer. toString(recordCount);
+				String jsonStr="";
+				if(usrs != null && usrs.length != 0){
+					JSONArray jsa = JSONArray.fromObject(usrs);
+					jsonStr = jsa.toString();
+				}
+				jsonStr = "{\"usrs\":"+jsonStr+",\"pages\":\""+pages+"\"}";
+				return jsonStr;
 			}
 		}catch (Exception e) {
 				e.printStackTrace();

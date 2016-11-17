@@ -38,12 +38,13 @@ function srhusr(){
 		error: function(xhr, err){
 			alert('Error：' + err + '！')
 		},
-		success: function(usrs){
+		success: function(res){
+			var usrs = res.usrs
 			$("#usrtb").empty()
 			$("#nav").empty()
 			$('#usrtb').after('<div id="nav"></div>')
-			var rowsShown = 1
-			var rowsTotal = usrs.length
+			var rowsShown = 2
+			var rowsTotal = res.pages
 			var numPages = Math.round(rowsTotal/rowsShown)
 			
 			for(i = 0;i<numPages;i++) {

@@ -12,7 +12,6 @@ import javax.servlet.http.HttpSession;
 
 import com.javatest.dao.UserDao;
 import com.javatest.model.User;
-import net.sf.json.JSONArray;
 
 @WebServlet("/UserServlet")
 public class UserServlet extends HttpServlet {
@@ -172,11 +171,8 @@ public class UserServlet extends HttpServlet {
 				}
 				keyword += "role=N'"+role+"'";
 			}
-			User[] usrs = userDao.search(page, keyword);
-			if(usrs != null && usrs.length != 0){
-				JSONArray jsa = JSONArray.fromObject(usrs);
-				jsonStr = jsa.toString();
-			}
+			
+			jsonStr = userDao.search(page, keyword);
 			PrintWriter out = null;
 			try {
 			    out = response.getWriter();
