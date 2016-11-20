@@ -133,8 +133,8 @@ public class UserDao {
 			
 			if (con != null) {
 				Statement stmt=con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-				String sql = "SELECT TOP 2 * FROM "+usertable+keyword+isWhere+
-						"  ID NOT IN(SELECT TOP "+((pageNo - 1)*2)+" ID FROM "+usertable+keyword+
+				String sql = "SELECT TOP 5 * FROM "+usertable+keyword+isWhere+
+						"  ID NOT IN(SELECT TOP "+((pageNo - 1)*5)+" ID FROM "+usertable+keyword+
 						" ORDER BY ID) ORDER BY ID";
 
 				ResultSet rs = stmt.executeQuery(sql);

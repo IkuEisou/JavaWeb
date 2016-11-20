@@ -43,9 +43,9 @@ function srhusr(){
 			$("#usrtb").empty()
 			$("#nav").empty()
 			$('#usrtb').after('<div id="nav"></div>')
-			var rowsShown = 2
+			var rowsShown = 5
 			var rowsTotal = res.pages
-			var numPages = Math.round(rowsTotal/rowsShown)
+			var numPages = Math.ceil(rowsTotal/rowsShown)
 			
 			for(i = 0;i<numPages;i++) {
 				var pageNum = i + 1
