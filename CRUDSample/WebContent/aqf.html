@@ -20,61 +20,41 @@
         <div class="searchrow">
             <table style="margin-left: -3px;">
                 <tbody><tr>
-                    <td>单位名称：</td>
+                    <td>安全阀型号：</td>
                     <td>
-                        <input type="text" id="LoginName">
-                    </td>
-                    <td>唯一编码：</td>
-                    <td>
-                        <input type="text" id="RealName">
-                    </td>
-                </tr>
-                <tr>
-                    <td>正定压力：</td>
-                    <td>
-                        <select id="dep">
-                        <option></option>
-                        <option value=jn>江南安全阀校验中心</option>
-                        <option value=jb>江北安全阀校验中心</option>
-                        <option value=tx>退休返聘</option>
-                        </select>
-                    </td>
-                    <td>工作介质：</td>
-                    <td>
-                        <select id="role">
-                        <option></option>
-                        <option value=admin>管理员</option>
-                        <option value=pt>普通员工</option>
-                        <option value=checker>检验员</option>
-                        <option value=reviewer>相关审批人员</option>
-                        </select>
+                        <input type="text" id="xh">
                     </td>
                 </tr>
             </tbody></table>
         </div>
         <div class="searchrow">
-            <input type="button" id="btnQuery" class="normalbutton" value="查询" onclick="srhusr()">
+            <input type="button" id="btnQuery" class="normalbutton" value="查询" onclick="srhaqf()">
             <input type="button" id="btnAdd" class="normalbutton" value="新增" onclick="window.open('manage.html')">
             <input type="button" id="btnUpdate" class="normalbutton" value="修改" onclick="upduser()">
             <input type="button" id="btnDelete" class="normalbutton" value="删除" onclick="deluser()">
         </div>
-        <div id="userlist" >
-        <table border="1" id="usrtable" class="display" >
+        <div id="aqflist" >
+        <table border="1" id="aqftable" class="display" >
         <tr id="1row">
         	<td> <input type="checkbox" id="checkAll"></td>
-        	<td>系统登录名</td>
-	        <td>登录密码</td>
-	        <td>真实姓名</td>
-	        <td>部门</td>
-	        <td>角色</td>
+        	<td>序号</td>
+	        <td>型号</td>
+	        <td>公称通径(mm)</td>
+	        <td>工作介质</td>
+	        <td>工作压力(MPa)</td>
+	        <td>整定压力(MPa)</td>
+	        <td>附属设备代码</td>
+	        <td>安装位置</td>
+	        <td>报告编号</td>
+	        <td>检验费用(元)</td>
         </tr>
-        <tbody id="usrtb">
+        <tbody id="aqftb">
         </tbody>
         </table>
         </div>
     </div>
     
     <script type="text/javascript" src="js/jquery.js"></script> 
-	<script type="text/javascript" src="js/usrlist.js"></script>
+	<script type="text/javascript" src="js/aqf.js"></script>
     </body>
 </html>
