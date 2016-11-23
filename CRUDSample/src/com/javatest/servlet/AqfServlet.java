@@ -40,9 +40,47 @@ public class AqfServlet extends HttpServlet {
 		switch (flag) {
 		case "srh":
 			String xh = request.getParameter("xh");
+			String wh = request.getParameter("wh");
+			String name = request.getParameter("name");
+			String dw = request.getParameter("dw");
+			String zt = request.getParameter("zt");
 	
 			if(!xh.isEmpty()){
-				keyword += " WHERE xh='"+xh+"' ";
+//				keyword += " WHERE xh='"+xh+"' ";
+				keyword += " WHERE xh LIKE '%"+xh+"%' ";
+			}
+			if(!wh.isEmpty()){
+				if(!keyword.isEmpty()){
+					keyword += " AND ";
+				}else{
+					keyword += " WHERE ";
+				}
+//				keyword += "wh=N'"+wh+"'";
+				keyword += "wh LIKE N'%"+wh+"%'";
+			}
+			if(!name.isEmpty()){
+				if(!keyword.isEmpty()){
+					keyword += " AND ";
+				}else{
+					keyword += " WHERE ";
+				}
+				keyword += "name=N'"+name+"'";
+			}
+			if(!dw.isEmpty()){
+				if(!keyword.isEmpty()){
+					keyword += " AND ";
+				}else{
+					keyword += " WHERE ";
+				}
+				keyword += "dw=N'"+dw+"'";
+			}
+			if(!zt.isEmpty()){
+				if(!keyword.isEmpty()){
+					keyword += " AND ";
+				}else{
+					keyword += " WHERE ";
+				}
+				keyword += "zt=N'"+zt+"'";
 			}
 			jsonStr = aqfDao.search(page, keyword);
 			break;

@@ -9,9 +9,10 @@ public class Aqf {
 	private String zdyl;
 	private String fsdm;
 	private String azwz;
-	private String bgbh;
-	private String jyfy;
+	private String wh;
+	private String name;
 	private String dw;
+	private String zt;
 	public String getXh() {
 		return xh;
 	}
@@ -24,11 +25,11 @@ public class Aqf {
 	public void setTj(String tj) {
 		this.tj = tj;
 	}
-	public String getBgbh() {
-		return bgbh;
+	public String getWh() {
+		return wh;
 	}
-	public void setBgbh(String bgbh) {
-		this.bgbh = bgbh;
+	public void setWh(String wh) {
+		this.wh = wh;
 	}
 	public String getGzjz() {
 		return gzjz;
@@ -54,11 +55,11 @@ public class Aqf {
 	public void setDw(String dw) {
 		this.dw = dw;
 	}
-	public String getJyfy() {
-		return jyfy;
+	public String getName() {
+		return name;
 	}
-	public void setJyfy(String jyfy) {
-		this.jyfy = jyfy;
+	public void setName(String name) {
+		this.name = name;
 	}
 	public String getAzwz() {
 		return azwz;
@@ -77,6 +78,12 @@ public class Aqf {
 	}
 	public void setId(String id) {
 		this.id = id;
+	}
+	public String getZt() {
+		return zt;
+	}
+	public void setZt(String zt) {
+		this.zt = zt;
 	}
 }
 

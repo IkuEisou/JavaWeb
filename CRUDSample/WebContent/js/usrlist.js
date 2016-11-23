@@ -40,26 +40,30 @@ function srhusr(){
 		},
 		success: function(res){
 			var usrs = res.usrs
-			$("#usrtb").empty()
-			$("#nav").empty()
-			$('#usrtb').after('<div id="nav"></div>')
-			var rowsShown = 5
-			var rowsTotal = res.pages
-			var numPages = Math.ceil(rowsTotal/rowsShown)
-			
-			for(i = 0;i<numPages;i++) {
-				var pageNum = i + 1
-				$('#nav').append('<a href="user.html?page='+pageNum+'"'+' rel="'+i+'">'+pageNum+'</a> ')
-			}
-			
-			for(var i=0; i < usrs.length; i++){
-				var usr = '<tr><td><input type="checkbox" name="subBox"  id=cb"'+i+'"></td>'+
-				'<td>'+usrs[i]["username"]+'</td>'+
-				'<td>'+usrs[i]["password"]+'</td>'+
-				'<td>'+usrs[i]["real"]+'</td>'+
-				'<td>'+usrs[i]["dep"]+'</td>'+
-				'<td>'+usrs[i]["role"]+'</td>'+'</tr>'
-				$("#usrtb").append(usr)
+			if(res.pages == "0"){
+				alert(usrs)
+			}else{
+				$("#usrtb").empty()
+				$("#nav").empty()
+				$('#usrtb').after('<div id="nav"></div>')
+				var rowsShown = 5
+				var rowsTotal = res.pages
+				var numPages = Math.ceil(rowsTotal/rowsShown)
+				
+				for(i = 0;i<numPages;i++) {
+					var pageNum = i + 1
+					$('#nav').append('<a href="user.html?page='+pageNum+'"'+' rel="'+i+'">'+pageNum+'</a> ')
+				}
+				
+				for(var i=0; i < usrs.length; i++){
+					var usr = '<tr><td><input type="checkbox" name="subBox"  id=cb"'+i+'"></td>'+
+					'<td>'+usrs[i]["username"]+'</td>'+
+					'<td>'+usrs[i]["password"]+'</td>'+
+					'<td>'+usrs[i]["real"]+'</td>'+
+					'<td>'+usrs[i]["dep"]+'</td>'+
+					'<td>'+usrs[i]["role"]+'</td>'+'</tr>'
+					$("#usrtb").append(usr)
+				}
 			}
 		}
 	});

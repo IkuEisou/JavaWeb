@@ -125,6 +125,8 @@ public class UserDao {
 	}
 	
 	public String search(String page, String keyword){
+		String pages = "0";
+		String jsonStr="";
 		try {
 			JDBCUtil jdbcUtil = new JDBCUtil();
 			Connection con = jdbcUtil.getCon();
@@ -141,39 +143,40 @@ public class UserDao {
 				rs.last();
 				int rows = rs.getRow();
 				if(rows == 0){
-					return null;
+					jsonStr = "\"没有符合条件的记录!\"";
+				}else{
+					User[] usrs = new User[rows];
+					rs.first();
+					for(int i = 0;i<rows;i++,rs.next()){
+						User user = new User();
+						user.setUsername(rs.getString("name").trim());
+						user.setPassword(rs.getString("pwd").trim());
+						user.setRole(rs.getString("role").trim());
+						user.setDep(rs.getString("dep").trim());
+						user.setReal(rs.getString("real").trim());
+						usrs[i] = user;
+					}
+					
+					sql = "SELECT COUNT(*) FROM "+usertable+keyword;
+					rs = stmt.executeQuery(sql);
+					int recordCount = 0;
+				      if (rs.next()) 
+				      {
+				              recordCount = rs.getInt(1);
+				       }
+					pages = Integer. toString(recordCount);
+					
+					if(usrs != null && usrs.length != 0){
+						JSONArray jsa = JSONArray.fromObject(usrs);
+						jsonStr = jsa.toString();
+					}
 				}
-				User[] usrs = new User[rows];
-				rs.first();
-				for(int i = 0;i<rows;i++,rs.next()){
-					User user = new User();
-					user.setUsername(rs.getString("name").trim());
-					user.setPassword(rs.getString("pwd").trim());
-					user.setRole(rs.getString("role").trim());
-					user.setDep(rs.getString("dep").trim());
-					user.setReal(rs.getString("real").trim());
-					usrs[i] = user;
-				}
-				
-				sql = "SELECT COUNT(*) FROM "+usertable+keyword;
-				rs = stmt.executeQuery(sql);
-				int recordCount = 0;
-			      if (rs.next()) 
-			      {
-			              recordCount = rs.getInt(1);
-			       }
-				String pages = Integer. toString(recordCount);
-				String jsonStr="";
-				if(usrs != null && usrs.length != 0){
-					JSONArray jsa = JSONArray.fromObject(usrs);
-					jsonStr = jsa.toString();
-				}
-				jsonStr = "{\"usrs\":"+jsonStr+",\"pages\":\""+pages+"\"}";
-				return jsonStr;
 			}
 		}catch (Exception e) {
 				e.printStackTrace();
+				jsonStr = "\"查询失败!\"";
+				return  "{\"usrs\":"+jsonStr+",\"pages\":\""+pages+"\"}";
 		}
-		return null;
+		return 	"{\"usrs\":"+jsonStr+",\"pages\":\""+pages+"\"}";
 	}
 }

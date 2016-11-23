@@ -19,12 +19,35 @@
         </div>
         <div class="searchrow">
             <table style="margin-left: -3px;">
-                <tbody><tr>
+                <tbody>
+                <tr>
                     <td>安全阀型号：</td>
                     <td>
                         <input type="text" id="xh">
                     </td>
+                    <td>位号：</td>
+                    <td>
+                        <input type="text" id="wh">
+                    </td>
+                   <td>装置名称：</td>
+                    <td>
+                        <input type="text" id="name">
+                    </td>
                 </tr>
+                <tr>
+                   <td>使用单位：</td>
+                    <td>
+                        <input type="text" id="dw">
+                    </td>
+                    <td>阀门状态：</td>
+                    <td>
+                     <select id="zt">
+                        <option></option>
+                        <option value=zc>正常</option>
+                        <option value=jyz>校验中</option>
+                        </select>
+                    </td>                    
+                </tr>                
             </tbody></table>
         </div>
         <div class="searchrow">
@@ -38,15 +61,17 @@
         <tr id="1row">
         	<td> <input type="checkbox" id="checkAll"></td>
         	<td>序号</td>
+        	<td>位号</td>
 	        <td>型号</td>
+	        <td>装置名称</td>
+	        <td>使用单位</td>
 	        <td>公称通径(mm)</td>
 	        <td>工作介质</td>
 	        <td>工作压力(MPa)</td>
 	        <td>整定压力(MPa)</td>
 	        <td>附属设备代码</td>
 	        <td>安装位置</td>
-	        <td>报告编号</td>
-	        <td>检验费用(元)</td>
+	        <td>阀门状态</td>
         </tr>
         <tbody id="aqftb">
         </tbody>
