@@ -149,7 +149,7 @@ public class UserServlet extends HttpServlet {
 			}
 			if(!realname.isEmpty()){
 				if(!keyword.isEmpty()){
-					keyword += ",";
+					keyword += " AND ";
 				}else{
 					keyword += " WHERE ";
 				}
@@ -157,7 +157,7 @@ public class UserServlet extends HttpServlet {
 			}
 			if(!dep.isEmpty()){
 				if(!keyword.isEmpty()){
-					keyword += ",";
+					keyword += " AND ";
 				}else{
 					keyword += " WHERE ";
 				}
@@ -165,7 +165,7 @@ public class UserServlet extends HttpServlet {
 			}
 			if(!role.isEmpty()){
 				if(!keyword.isEmpty()){
-					keyword += ",";
+					keyword += " AND ";
 				}else{
 					keyword += " WHERE ";
 				}
