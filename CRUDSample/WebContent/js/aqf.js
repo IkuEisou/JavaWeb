@@ -78,6 +78,66 @@ function srhaqf(){
 	});
 }
 
+function delaqf(){
+	var checked = $("input[type='checkbox'][name='subBox']")
+	$(checked).each(function(){
+		if($(this).attr("checked")==true) 
+		{
+			var item = $(this).parent().next()[0].innerText
+			if (item=="") {
+				alert("请勾选要删除的项")
+				return;
+			}
+			$(this).parent().parent().remove()
+			$.ajax({
+				type: 'POST',
+				url :'AqfServlet',
+				dataType:'json',
+				data:{
+					flag:"delete",
+					wh:item,
+				},
+				error: function(xhr,err){
+					alert('request failed:'+err+'!')
+				},
+				success: function(data){
+					//alert(data.msg)
+				}
+			});
+		}
+	 });
+}
+
+function updaqf(){
+	var checked = $("input[type='checkbox'][name='subBox']");
+	$(checked).each(function(){
+		if($(this).attr("checked")==true) 
+		{
+			var aqf= $(this).parent().nextAll();
+			var wh = aqf[1].innerText;
+			var xh = aqf[2].innerText;
+			var name = aqf[3].innerText;
+			var dw = aqf[4].innerText;
+			var gctj = aqf[5].innerText;
+			var gzjz = aqf[6].innerText;
+			var gzyl = aqf[7].innerText;
+			var zdyl = aqf[8].innerText;
+			var fsdm = aqf[9].innerText;
+			var azwz = aqf[10].innerText;
+			var zt = aqf[11].innerText;
+			if (wh=="") {
+				alert("请勾选要更新的项");
+				return;
+			}
+			var url = 'aqfedit.html?wh='+wh+'&xh='+xh+
+			'&name='+encodeURIComponent(name)+'&dw='+encodeURIComponent(dw)+
+			'&zt='+encodeURIComponent(zt)+'&gzjz='+encodeURIComponent(gzjz)+
+			'&gctj='+gctj+'&gzyl='+gzyl+'&zdyl='+zdyl+'&fsdm='+fsdm+
+			'&azwz='+encodeURIComponent(azwz)
+			window.open(url)
+		}
+	 });
+}
 $.extend({
 	  getUrlVars: function(){
 	    var vars = [], hash;
