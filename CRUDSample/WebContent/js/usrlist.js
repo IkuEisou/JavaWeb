@@ -71,15 +71,17 @@ function srhusr(){
 
 function deluser(){
 	var checked = $("input[type='checkbox'][name='subBox']")
+	var ischecked = false;
 	$(checked).each(function(){
 		if($(this).attr("checked")==true) 
 		{
+			ischecked = true
 			var username = $(this).parent().next()[0].innerText
 			if (username=="") {
-				alert("请勾选用户")
+				alert("登录名不能为空！")
 				return;
 			}
-			$(this).parent().parent().remove()
+			var del = $(this).parent().parent()
 			$.ajax({
 				type: 'POST',
 				url :'UserServlet',
@@ -92,18 +94,24 @@ function deluser(){
 					alert('request failed:'+err+'!')
 				},
 				success: function(data){
-					//alert(data.msg)
+					del.remove()
 				}
 			});
 		}
 	 });
+	if(!ischecked){
+		alert("请勾选要删除的项！");
+		return;
+	}
 }
 
 function upduser(){
 	var checked = $("input[type='checkbox'][name='subBox']");
+	var ischecked = false;
 	$(checked).each(function(){
 		if($(this).attr("checked")==true) 
 		{
+			ischecked = true
 			var usr= $(this).parent().nextAll();
 			var username = usr[0].innerText;
 			var password = usr[1].innerText;
@@ -111,14 +119,19 @@ function upduser(){
 			var dep = usr[3].innerText;
 			var role = usr[4].innerText;
 			if (username=="") {
-				alert("请勾选用户");
+				alert("登录名不能为空！");
 				return;
 			}
 			var url = 'manage.html?username='+username+'&password='+password+
-			'&realname='+encodeURIComponent(realname)+'&dep='+encodeURIComponent(dep)+'&role='+encodeURIComponent(role)
+			'&realname='+encodeURIComponent(realname)+'&dep='+encodeURIComponent(dep)+
+			'&role='+encodeURIComponent(role)
 			window.open(url)
 		}
 	 });
+	if(!ischecked){
+		alert("请勾选要修改的项！");
+		return;
+	}
 }
 
 $.extend({

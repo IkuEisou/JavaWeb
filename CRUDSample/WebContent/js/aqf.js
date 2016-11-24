@@ -80,15 +80,17 @@ function srhaqf(){
 
 function delaqf(){
 	var checked = $("input[type='checkbox'][name='subBox']")
+	var ischecked = false;
 	$(checked).each(function(){
 		if($(this).attr("checked")==true) 
 		{
-			var item = $(this).parent().next()[0].innerText
+			ischecked = true
+			var item = $(this).parent().next().next()[0].innerText
 			if (item=="") {
-				alert("请勾选要删除的项")
+				alert("位号不能为空！")
 				return;
 			}
-			$(this).parent().parent().remove()
+			var del = $(this).parent().parent()
 			$.ajax({
 				type: 'POST',
 				url :'AqfServlet',
@@ -101,18 +103,24 @@ function delaqf(){
 					alert('request failed:'+err+'!')
 				},
 				success: function(data){
-					//alert(data.msg)
+					del.remove()
 				}
 			});
 		}
 	 });
+	if(!ischecked){
+		alert("请勾选要删除的项！");
+		return;
+	}
 }
 
 function updaqf(){
 	var checked = $("input[type='checkbox'][name='subBox']");
+	var ischecked = false;
 	$(checked).each(function(){
 		if($(this).attr("checked")==true) 
 		{
+			ischecked = true
 			var aqf= $(this).parent().nextAll();
 			var wh = aqf[1].innerText;
 			var xh = aqf[2].innerText;
@@ -125,10 +133,7 @@ function updaqf(){
 			var fsdm = aqf[9].innerText;
 			var azwz = aqf[10].innerText;
 			var zt = aqf[11].innerText;
-			if (wh=="") {
-				alert("请勾选要更新的项");
-				return;
-			}
+
 			var url = 'aqfedit.html?wh='+wh+'&xh='+xh+
 			'&name='+encodeURIComponent(name)+'&dw='+encodeURIComponent(dw)+
 			'&zt='+encodeURIComponent(zt)+'&gzjz='+encodeURIComponent(gzjz)+
@@ -137,6 +142,10 @@ function updaqf(){
 			window.open(url)
 		}
 	 });
+	if(!ischecked){
+		alert("请勾选要更新的项！");
+		return;
+	}
 }
 $.extend({
 	  getUrlVars: function(){

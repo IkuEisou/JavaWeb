@@ -75,4 +75,84 @@ public class AqfDao {
 		}
 		return "{\"aqfs\":"+jsonStr+",\"pages\":\""+pages+"\"}";
 	}
+	
+	public boolean delete(String wh) {
+		JDBCUtil jdbcUtil = new JDBCUtil();
+		try {
+			Connection con = jdbcUtil.getCon();
+			String sql = "delete from "+aqftable+" where wh='"
+					+wh+"'";
+			Statement stmt=con.createStatement();
+			int ok = stmt.executeUpdate(sql);
+			if(ok > 0 ){
+				return true;
+			}else{
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean add(Aqf a){
+		JDBCUtil jdbcUtil = new JDBCUtil();
+		try {
+			Connection con = jdbcUtil.getCon();
+			Statement stmt=con.createStatement();
+			String sql = "insert into "+aqftable+"(xh,tj,gzjz,gzyl,zdyl,fsdm,azwz,wh,name,dw,zt) values(N'"+
+					a.getXh()+"', "+a.getTj()+", N'"+a.getGzjz()+"', N'"+a.getGzyl()+"', N'"+a.getZdyl()+
+					"', N'"+a.getFsdm()+"', N'"+a.getAzwz()+"', N'"+a.getWh()+"', N'"+a.getName()+
+					"', N'"+a.getDw()+"', N'"+a.getZt()+"')";
+			int ok = stmt.executeUpdate(sql);
+			if(ok > 0 ){
+				return true;
+			}else{
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean isExsit(String wh){
+		JDBCUtil jdbcUtil = new JDBCUtil();
+		try {
+			Connection con = jdbcUtil.getCon();
+			String sql = "select * from "+aqftable+" where wh='"
+					+wh+"'";
+			Statement stmt=con.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			if(rs!=null && rs.next()){
+				return true;
+			}else{
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean update(Aqf a){
+		JDBCUtil jdbcUtil = new JDBCUtil();
+		try {
+			Connection con = jdbcUtil.getCon();
+			String sql = "update "+aqftable+" set xh=N'"+a.getXh()+"', tj=N'"+a.getTj()+"', gzjz=N'"+a.getGzjz()+
+					"', gzyl=N'"+a.getGzyl()+"', zdyl=N'"+a.getZdyl()+"', fsdm=N'"+a.getFsdm()+"', zt=N'"+a.getZt()+
+					"', azwz=N'"+a.getAzwz()+"', name=N'"+a.getName()+"', dw=N'"+a.getDw()+
+					"' where wh='"+a.getWh()+"'";
+			Statement stmt=con.createStatement();
+			int ok = stmt.executeUpdate(sql);
+			if(ok > 0 ){
+				return true;
+			}else{
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

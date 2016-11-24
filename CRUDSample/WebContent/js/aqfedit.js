@@ -4,7 +4,6 @@ function save(){
 	var name = $("#name").val()
 	var dw = $("#dw").val()
 	var gctj = $("#gctj").val()
-	var dw = $("#dw").val()
 	var gzjz = $("#gzjz").val()
 	var gzyl = $("#gzyl").val()
 	var zdyl = $("#zdyl").val()
@@ -23,7 +22,6 @@ function save(){
 			name:name,
 			dw:dw,
 			gctj:gctj,
-			dw:dw,
 			gzjz:gzjz,
 			gzyl:gzyl,
 			zdyl:zdyl,

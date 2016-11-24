@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.javatest.dao.AqfDao;
+import com.javatest.model.Aqf;
 
 @WebServlet("/AqfServlet")
 public class AqfServlet extends HttpServlet {
@@ -83,6 +84,54 @@ public class AqfServlet extends HttpServlet {
 				keyword += "zt=N'"+zt+"'";
 			}
 			jsonStr = aqfDao.search(page, keyword);
+			break;
+		case "delete":
+			wh = request.getParameter("wh");
+			if (aqfDao.delete(wh)) {
+				jsonStr = "{\"msg\":\"delete success.\"}";
+			}else{
+				jsonStr = "{\"msg\":\"delete failed.\"}";
+			}
+			break;
+		case "add":
+			Aqf a = new Aqf();
+			wh = request.getParameter("wh").trim();
+			xh = request.getParameter("xh");
+			name = request.getParameter("name");
+			dw = request.getParameter("dw");
+			zt = request.getParameter("zt");
+			String tj = request.getParameter("gctj");
+			String gzjz = request.getParameter("gzjz");
+			String gzyl = request.getParameter("gzyl");
+			String zdyl = request.getParameter("zdyl");
+			String fsdm = request.getParameter("fsdm");
+			String azwz = request.getParameter("azwz");
+
+			a.setWh(wh);
+			a.setXh(xh);
+			a.setName(name);
+			a.setDw(dw);
+			a.setZt(zt);
+			a.setTj(tj);
+			a.setGzjz(gzjz);
+			a.setGzyl(gzyl);
+			a.setZdyl(zdyl);
+			a.setFsdm(fsdm);
+			a.setAzwz(azwz);
+			
+			if (aqfDao.isExsit(wh)) {
+				if(aqfDao.update(a)){
+					jsonStr = "{\"msg\":\"update success.\"}";
+				}else{
+					jsonStr = "{\"msg\":\"update failed.\"}";
+				}
+			}else {
+				if(aqfDao.add(a)){
+					jsonStr = "{\"msg\":\"insert success.\"}";
+				}else{
+					jsonStr = "{\"msg\":\"insert failed.\"}";
+				}
+			}
 			break;
 		default:
 			response.sendRedirect("login.html");
