@@ -185,6 +185,28 @@ public class UserServlet extends HttpServlet {
 			        out.close();
 			    }
 			}	
+		}else if ("srhall".equals(flag)){
+			String jsonStr = "{\"msg\":\"srh user list failed.\"}";
+			String role = request.getParameter("role").trim();
+			String keyword = "";
+
+			if(!role.isEmpty()){
+				keyword += " WHERE role=N'"+role+"' ";
+			}
+			
+			jsonStr = userDao.searchAll(keyword);
+			PrintWriter out = null;
+			try {
+			    out = response.getWriter();
+			    out.write(jsonStr);
+			    out.flush();
+			} catch (IOException e) {
+			    e.printStackTrace();
+			} finally {
+			    if (out != null) {
+			        out.close();
+			    }
+			}	
 		}
 	}
 }

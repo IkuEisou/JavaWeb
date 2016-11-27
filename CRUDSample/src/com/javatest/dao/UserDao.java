@@ -179,4 +179,44 @@ public class UserDao {
 		}
 		return 	"{\"usrs\":"+jsonStr+",\"pages\":\""+pages+"\"}";
 	}
+	
+	public String searchAll(String keyword){
+		String jsonStr="";
+		try {
+			JDBCUtil jdbcUtil = new JDBCUtil();
+			Connection con = jdbcUtil.getCon();
+			
+			if (con != null) {
+				Statement stmt=con.createStatement(
+						ResultSet.TYPE_SCROLL_SENSITIVE,
+						ResultSet.CONCUR_UPDATABLE);
+				String sql = "SELECT real FROM "+usertable+keyword;
+
+				ResultSet rs = stmt.executeQuery(sql);
+				rs.last();
+				int rows = rs.getRow();
+				if(rows == 0){
+					jsonStr = "\"没有符合条件的记录!\"";
+				}else{
+					User[] usrs = new User[rows];
+					rs.first();
+					for(int i = 0;i<rows;i++,rs.next()){
+						User user = new User();
+						user.setReal(rs.getString("real").trim());
+						usrs[i] = user;
+					}
+					
+					if(usrs != null && usrs.length != 0){
+						JSONArray jsa = JSONArray.fromObject(usrs);
+						jsonStr = jsa.toString();
+					}
+				}
+			}
+		}catch (Exception e) {
+				e.printStackTrace();
+				jsonStr = "\"查询失败!\"";
+				return  "{\"usrs\":"+jsonStr+"\"}";
+		}
+		return 	"{\"usrs\":"+jsonStr+"}";
+	}
 }

@@ -9,14 +9,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import com.javatest.dao.WtdDao;
+import com.javatest.model.Wtd;
 
-import com.javatest.dao.AqfDao;
-import com.javatest.model.Aqf;
-
-@WebServlet("/AqfServlet")
-public class AqfServlet extends HttpServlet {
+@WebServlet("/WtdServlet")
+public class WtdServlet extends HttpServlet {
 	private static final long serialVersionUID = 2L;
-    public AqfServlet() {
+    public WtdServlet() {
         super();
     }
 
@@ -33,98 +32,81 @@ public class AqfServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 
-		AqfDao aqfDao = new AqfDao();
+		WtdDao wtdDao = new WtdDao();
 		String flag = request.getParameter("flag");
 		String jsonStr = "";
 		String keyword = "";
 		String page = request.getParameter("page");
 		switch (flag) {
-		case "srh":
-			String xh = request.getParameter("xh");
-			String wh = request.getParameter("wh");
-			String name = request.getParameter("name");
+		case "srhaqf":
 			String dw = request.getParameter("dw");
-			String zt = request.getParameter("zt");
 	
-			if(!xh.isEmpty()){
-				keyword += " WHERE xh LIKE '%"+xh+"%' ";
-			}
-			if(!wh.isEmpty()){
-				if(!keyword.isEmpty()){
-					keyword += " AND ";
-				}else{
-					keyword += " WHERE ";
-				}
-				keyword += "wh LIKE N'%"+wh+"%'";
-			}
-			if(!name.isEmpty()){
-				if(!keyword.isEmpty()){
-					keyword += " AND ";
-				}else{
-					keyword += " WHERE ";
-				}
-				keyword += "name=N'"+name+"'";
-			}
 			if(!dw.isEmpty()){
-				if(!keyword.isEmpty()){
-					keyword += " AND ";
-				}else{
-					keyword += " WHERE ";
-				}
-				keyword += "dw=N'"+dw+"'";
+				keyword += " WHERE dw LIKE '%"+dw+"%' ";
 			}
-			if(!zt.isEmpty()){
-				if(!keyword.isEmpty()){
-					keyword += " AND ";
-				}else{
-					keyword += " WHERE ";
-				}
-				keyword += "zt=N'"+zt+"'";
-			}
-			jsonStr = aqfDao.search(page, keyword);
+			jsonStr = wtdDao.searchAqf(page, keyword);
 			break;
+		case "srhwtd":
+			dw = request.getParameter("dw");
+			String dh = request.getParameter("dh");
+			String st = request.getParameter("st").replace("T", " ");
+			String et = request.getParameter("et").replace("T", " ");
+			
+			if(!dw.isEmpty()){
+				keyword += " WHERE dw LIKE '%"+dw+"%' ";
+			}
+			if(!dh.isEmpty()){
+				if(!keyword.isEmpty()){
+					keyword += " AND ";
+				}else{
+					keyword += " WHERE ";
+				}
+				keyword += "dh LIKE N'%"+dh+"%'";
+			}
+			if(!st.isEmpty()){
+				if(!keyword.isEmpty()){
+					keyword += " AND ";
+				}else{
+					keyword += " WHERE ";
+				}
+				keyword += "time > '"+st+"'";
+			}
+			if(!et.isEmpty()){
+				if(!keyword.isEmpty()){
+					keyword += " AND ";
+				}else{
+					keyword += " WHERE ";
+				}
+				keyword += "time < '"+et+"'";
+			}
+			jsonStr = wtdDao.searchWtd(page, keyword);
+			break;			
 		case "delete":
-			wh = request.getParameter("wh");
-			if (aqfDao.delete(wh)) {
+			dh = request.getParameter("dh");
+			if (wtdDao.delete(dh)) {
 				jsonStr = "{\"msg\":\"delete success.\"}";
 			}else{
 				jsonStr = "{\"msg\":\"delete failed.\"}";
 			}
 			break;
 		case "add":
-			Aqf a = new Aqf();
-			wh = request.getParameter("wh").trim();
-			xh = request.getParameter("xh");
-			name = request.getParameter("name");
+			Wtd a = new Wtd();
+			String wh = request.getParameter("wh").trim();
 			dw = request.getParameter("dw");
-			zt = request.getParameter("zt");
-			String tj = request.getParameter("gctj");
-			String gzjz = request.getParameter("gzjz");
-			String gzyl = request.getParameter("gzyl");
-			String zdyl = request.getParameter("zdyl");
-			String fsdm = request.getParameter("fsdm");
-			String azwz = request.getParameter("azwz");
-
+			String jy = request.getParameter("jy");
+			dh = request.getParameter("dh");
 			a.setWh(wh);
-			a.setXh(xh);
-			a.setName(name);
+			a.setJy(jy);
 			a.setDw(dw);
-			a.setZt(zt);
-			a.setTj(tj);
-			a.setGzjz(gzjz);
-			a.setGzyl(gzyl);
-			a.setZdyl(zdyl);
-			a.setFsdm(fsdm);
-			a.setAzwz(azwz);
-			
-			if (aqfDao.isExsit(wh)) {
-				if(aqfDao.update(a)){
+			a.setDh(dh);
+			if (wtdDao.isExsit(wh)) {
+				if(wtdDao.update(a)){
 					jsonStr = "{\"msg\":\"update success.\"}";
 				}else{
 					jsonStr = "{\"msg\":\"update failed.\"}";
 				}
 			}else {
-				if(aqfDao.add(a)){
+				if(wtdDao.add(a)){
 					jsonStr = "{\"msg\":\"insert success.\"}";
 				}else{
 					jsonStr = "{\"msg\":\"insert failed.\"}";

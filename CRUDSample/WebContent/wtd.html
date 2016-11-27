@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>委托单管理</title>
+ <link rel="Stylesheet" type="text/css" href="css/login.css" />
+</head>
+<body>
+    <div class="panel datagrid" style="width: 100%;">
+        <div class="panel-header">
+            <div class="panel-title">委托单管理</div>
+            <div class="panel-tool"></div>
+        </div>
+    </div>
+
+    <div class="functionarea">
+        <div class="searchrow">
+            <span class="line_title">条件检索</span>
+        </div>    
+        <div class="searchrow">
+            <table style="margin-left: -3px;">
+                <tbody>
+                <tr>
+                   <td>报检单位：</td>
+                    <td>
+                     <select id="dw">
+                        <option></option>
+                     </select>
+                    </td> 
+                </tr>
+                <tr>
+                   <td>委托单号：</td>
+                   <td>
+                     <input type="text" id="dh">
+                   </td>
+                </tr> 
+                <tr>
+	                <td>生成时间：</td>
+	                <td>
+	                  <input type="datetime-local" id="st">
+	                </td>
+	                <td>
+	                  <input type="datetime-local" id="et">
+	                </td>   
+                </tr>
+            </tbody></table>
+        </div>
+        <div class="searchrow">
+            <input type="button" id="btnQuery" class="normalbutton" value="查询" onclick="srhwtd()">
+            <input type="button" id="btnAdd" class="normalbutton" value="新增" onclick="window.open('editwtd.html')">
+            <input type="button" id="btnUpdate" class="normalbutton" value="修改" onclick="updwtd()">
+            <input type="button" id="btnDelete" class="normalbutton" value="删除" onclick="delwtd()">
+        </div>
+        <div id="wtdlist" >
+        <table border="1" id="wtdtable" class="display" >
+        <tr id="1row">
+        	<td> <input type="checkbox" id="checkAll"></td>
+        	<td>序号</td>
+        	<td>委托单号</td>
+        	<td>报检单位</td>
+	        <td>生成时间</td>
+        </tr>
+        <tbody id="wtdtb">
+        </tbody>
+        </table>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="js/jquery.js"></script> 
+	<script type="text/javascript" src="js/wtd.js"></script>
+    </body>
+</html>
