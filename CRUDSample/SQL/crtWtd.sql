@@ -1,7 +1,7 @@
 USE [devdb]
 GO
 
-/****** Object:  Table [dbo].[wtd]    Script Date: 2016/11/27 21:47:01 ******/
+/****** Object:  Table [dbo].[wtd]    Script Date: 2016/12/4 0:16:08 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -14,7 +14,8 @@ CREATE TABLE [dbo].[wtd](
 	[dw] [nchar](20) NOT NULL,
 	[wh] [nchar](30) NOT NULL,
 	[jy] [nchar](10) NULL,
-	[id] [int] IDENTITY(1,1) NOT NULL
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[fee] [float] NOT NULL
 ) ON [PRIMARY]
 
 GO
