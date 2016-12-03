@@ -4,50 +4,82 @@
 $(function(){
 	var dh = $.getUrlVar('dh')
 	var dw = $.getUrlVar('dw')
+	var page = $.getUrlVar('page')
+	if(page==undefined){
+		page = 1;
+	}
 	if(dh != undefined && dw != undefined){
 		$("title")[0].innerHTML = "修改委托单"
 		$("#topic")[0].innerHTML = "<B>修改委托单</B>"
 		$("#dh").val(dh);
-
+		$("#query").hide()
 		$('#dw option').each(function(){
 		    if( $(this)[0].innerHTML == dw){
 		    	$('#dw').attr('value', $(this).val())
 		     }
 		});
-	}	
-	$.ajax({
-		type: 'POST',
-		url: 'DwServlet',
-		dataType: 'json',
-		data: {
-			flag:"srhall"
-		},
-		error: function(xhr, err){
-			alert('Error：' + err + '！')
-		},
-		success: function(res){
-			var dws = res.dws
-			for(var i=0; i < dws.length; i++){
-				dw = '<option>'+dws[i]["name"]+'</option>'
-				$("#dw").append(dw)
+		
+		$.ajax({
+			type: 'POST',
+			url: 'WtdServlet',
+			dataType: 'json',
+			data: {
+				flag:"srhwtd",
+				st:"",
+				et:"",
+				dh:dh,
+				dw:dw,
+				page: page
+			},
+			error: function(xhr, err){
+				alert('Error：' + err + '！')
+			},
+			success: function(res){
+				var wtds = res.wtds
+				if(res.pages == "0"){
+					alert(wtds)
+				}else{
+					for(var i=0; i < wtds.length; i++){				
+						wh = wtds[i]["wh"]
+						srhaqf(wh,wtds[i]["fee"])
+						
+					}
+				}
 			}
-		}
-	});
-	srhaqf()
+		});
+	}else{
+		$.ajax({
+			type: 'POST',
+			url: 'DwServlet',
+			dataType: 'json',
+			data: {
+				flag:"srhall"
+			},
+			error: function(xhr, err){
+				alert('Error：' + err + '！')
+			},
+			success: function(res){
+				var dws = res.dws
+				for(var i=0; i < dws.length; i++){
+					dw = '<option>'+dws[i]["name"]+'</option>'
+					$("#dw").append(dw)
+				}
+			}
+		});
+		srhaqf("","")
+	}
 	 $("#checkAll").click(function() {
          $('input[name="subBox"]').attr("checked",this.checked) 
      });
-     var $subBox = $("input[name='subBox']")
-     $subBox.click(function(){
-         $("#checkAll").attr("checked",$subBox.length == $("input[name='subBox']:checked").length ? true : false)
-     });
 });
 
-function srhaqf(){
+function srhaqf(wh,fe){
 	var dw = $("#dw").find("option:selected").text()
 	var page = $.getUrlVar('page')
 	var usrs
 	var jy
+	var fee = '<input type="text" id="fee" value="'+fe+'">'
+		
 	if(page==undefined){
 		page = 1;
 	}
@@ -78,7 +110,7 @@ function srhaqf(){
 		data: {
 			flag:"srh",
 			xh:"",
-			wh:"",
+			wh:wh,
 			name:"",
 			dw:dw,
 			zt:"",
@@ -118,10 +150,15 @@ function srhaqf(){
 					'<td>'+aqfs[i]["fsdm"]+'</td>'+
 					'<td>'+aqfs[i]["azwz"]+'</td>'+
 					'<td>'+aqfs[i]["zt"]+'</td>'+
-					'<td>'+jy+'</td>'
+					'<td>'+jy+'</td>'+
+					'<td>'+fee+'</td>'+
 					'</tr>'
 					$("#aqftb").append(aqf)
 				}
+			     var $subBox = $("input[name='subBox']")
+			     $subBox.click(function(){
+			         $("#checkAll").attr("checked",$subBox.length == $("input[name='subBox']:checked").length ? true : false)
+			     });
 			}
 		}
 	});
@@ -142,6 +179,7 @@ function save(){
 			var dw = aqf[4].innerText
 			var zt = aqf[11].innerText
 			var jy = aqf[12].children[0].selectedOptions[0].innerText
+			var fee =$(aqf[13].children[0]).val()
 
 			if(zt == "校验中"){
 				alert("不能重复检验！")
@@ -157,7 +195,8 @@ function save(){
 					wh:wh,
 					dw:dw,
 					jy:jy,
-					dh:dh
+					dh:dh,
+					fee:fee
 				},
 				error: function(xhr, err){
 					alert('Error：' + err + '！')

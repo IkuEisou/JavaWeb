@@ -6,6 +6,7 @@ public class Wtd {
 	private String dw;
 	private String wh;
 	private String jy;
+	private String fee;
 	public String getDh() {
 		return dh;
 	}
@@ -35,5 +36,11 @@ public class Wtd {
 	}
 	public void setJy(String jy) {
 		this.jy = jy;
+	}
+	public String getFee() {
+		return fee;
+	}
+	public void setFee(String fee) {
+		this.fee = fee;
 	}
 }

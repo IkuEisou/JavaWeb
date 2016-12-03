@@ -79,7 +79,8 @@ function srhwtd(){
 					'<td>'+(i+1)+'</td>'+
 					'<td>'+wtds[i]["dh"]+'</td>'+					
 					'<td>'+wtds[i]["dw"]+'</td>'+
-					'<td>'+wtds[i]["time"]+'</td>'+'</tr>'
+					'<td>'+wtds[i]["time"]+'</td>'+
+					'</tr>'
 					$("#wtdtb").append(wtd)
 				}
 			     var $subBox = $("input[name='subBox']")

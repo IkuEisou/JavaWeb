@@ -95,10 +95,12 @@ public class WtdServlet extends HttpServlet {
 			dw = request.getParameter("dw");
 			String jy = request.getParameter("jy");
 			dh = request.getParameter("dh");
+			String fee = request.getParameter("fee");
 			a.setWh(wh);
 			a.setJy(jy);
 			a.setDw(dw);
 			a.setDh(dh);
+			a.setFee(fee);
 			if (wtdDao.isExsit(wh)) {
 				if(wtdDao.update(a)){
 					jsonStr = "{\"msg\":\"update success.\"}";

@@ -122,7 +122,7 @@ public class WtdDao {
 			Connection con = jdbcUtil.getCon();
 			String sql = "update "+wtdtable+" "
 					+ "set dh=N'"+a.getDh()+"', dw=N'"+a.getDw()
-					+"', jy=N'"+a.getJy()+
+					+"', jy=N'"+a.getJy()+"', fee='"+a.getFee()+
 					"' where wh='"+a.getWh()+"'";
 			Statement stmt=con.createStatement();
 			int ok = stmt.executeUpdate(sql);
@@ -142,9 +142,10 @@ public class WtdDao {
 		try {
 			Connection con = jdbcUtil.getCon();
 			Statement stmt=con.createStatement();
-			String sql = "insert into "+wtdtable+"(dh,dw,wh,jy) "
+			String sql = "insert into "+wtdtable+"(dh,dw,wh,jy,fee) "
 					+ "values(N'"+a.getDh()+"', "+
-					a.getDw()+", N'"+a.getWh()+"', N'"+a.getJy()+"')";
+					a.getDw()+", N'"+a.getWh()+"', N'"+a.getJy()+
+					"', '"+a.getFee()+"')";
 			int ok = stmt.executeUpdate(sql);
 			if(ok > 0 ){
 				return true;
@@ -187,6 +188,9 @@ public class WtdDao {
 						Wtd wtd = new Wtd();
 						wtd.setDh(rs.getString("dh").trim());
 						wtd.setDw(rs.getString("dw").trim());
+						wtd.setWh(rs.getString("wh").trim());
+						wtd.setJy(rs.getString("jy").trim());
+						wtd.setFee(rs.getString("fee").trim());
 						wtd.setTime(rs.getString("time"));
 						wtds[i] = wtd;
 					}
