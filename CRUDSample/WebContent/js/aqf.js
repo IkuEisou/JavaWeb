@@ -2,13 +2,27 @@
  * 
  */
 $(function(){
+	$.ajax({
+		type: 'POST',
+		url: 'DwServlet',
+		dataType: 'json',
+		data: {
+			flag:"srhall"
+		},
+		error: function(xhr, err){
+			alert('Error：' + err + '！')
+		},
+		success: function(res){
+			var dws = res.dws
+			for(var i=0; i < dws.length; i++){
+				dw = '<option>'+dws[i]["name"]+'</option>'
+				$("#dw").append(dw)
+			}
+		}
+	});
 	srhaqf()
 	 $("#checkAll").click(function() {
          $('input[name="subBox"]').attr("checked",this.checked) 
-     });
-     var $subBox = $("input[name='subBox']")
-     $subBox.click(function(){
-         $("#checkAll").attr("checked",$subBox.length == $("input[name='subBox']:checked").length ? true : false)
      });
 });
 
@@ -73,6 +87,10 @@ function srhaqf(){
 					'<td>'+aqfs[i]["zt"]+'</td>'+'</tr>'
 					$("#aqftb").append(aqf)
 				}
+			     var $subBox = $("input[name='subBox']")
+			     $subBox.click(function(){
+			         $("#checkAll").attr("checked",$subBox.length == $("input[name='subBox']:checked").length ? true : false)
+			     });
 			}
 		}
 	});
