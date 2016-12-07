@@ -143,8 +143,8 @@ public class WtdDao {
 			Connection con = jdbcUtil.getCon();
 			Statement stmt=con.createStatement();
 			String sql = "insert into "+wtdtable+"(dh,dw,wh,jy,fee) "
-					+ "values(N'"+a.getDh()+"', "+
-					a.getDw()+", N'"+a.getWh()+"', N'"+a.getJy()+
+					+ "values(N'"+a.getDh()+"', N'"+
+					a.getDw()+"', N'"+a.getWh()+"', N'"+a.getJy()+
 					"', '"+a.getFee()+"')";
 			int ok = stmt.executeUpdate(sql);
 			if(ok > 0 ){

@@ -3,7 +3,6 @@
  */
 $(function(){
 	var dh = $.getUrlVar('dh')
-	var dw = $.getUrlVar('dw')
 	var page = $.getUrlVar('page')
 	if(page==undefined){
 		page = 1;
@@ -13,11 +12,7 @@ $(function(){
 		$("#topic")[0].innerHTML = "<B>修改委托单</B>"
 		$("#dh").val(dh);
 		$("#query").hide()
-		$('#dw option').each(function(){
-		    if( $(this)[0].innerHTML == dw){
-		    	$('#dw').attr('value', $(this).val())
-		     }
-		});
+		$("#dhtr").hide()
 		
 		$.ajax({
 			type: 'POST',
@@ -28,7 +23,7 @@ $(function(){
 				st:"",
 				et:"",
 				dh:dh,
-				dw:dw,
+				dw:"",
 				page: page
 			},
 			error: function(xhr, err){
@@ -66,7 +61,6 @@ $(function(){
 				}
 			}
 		});
-		srhaqf("","")
 	}
 	 $("#checkAll").click(function() {
          $('input[name="subBox"]').attr("checked",this.checked) 

@@ -20,7 +20,6 @@ $(function(){
 			}
 		}
 	});	
-	srhwtd()
 	 $("#checkAll").click(function() {
          $('input[name="subBox"]').attr("checked",this.checked) 
      });
@@ -59,6 +58,7 @@ function srhwtd(){
 		},
 		success: function(res){
 			var wtds = res.wtds
+			var dhs = new Array()
 			if(res.pages == "0"){
 				alert(wtds)
 			}else{
@@ -75,13 +75,16 @@ function srhwtd(){
 				}
 				
 				for(var i=0; i < wtds.length; i++){
-					var wtd = '<tr><td><input type="checkbox" name="subBox"  id=cb"'+i+'"></td>'+
-					'<td>'+(i+1)+'</td>'+
-					'<td>'+wtds[i]["dh"]+'</td>'+					
-					'<td>'+wtds[i]["dw"]+'</td>'+
-					'<td>'+wtds[i]["time"]+'</td>'+
-					'</tr>'
-					$("#wtdtb").append(wtd)
+					if(dhs.indexOf(wtds[i]["dh"]) == -1){
+						var wtd = '<tr><td><input type="checkbox" name="subBox"  id=cb"'+i+'"></td>'+
+						'<td>'+(i+1)+'</td>'+
+						'<td>'+wtds[i]["dh"]+'</td>'+					
+						'<td>'+wtds[i]["dw"]+'</td>'+
+						'<td>'+wtds[i]["time"]+'</td>'+
+						'</tr>'
+						$("#wtdtb").append(wtd)
+						dhs[i]=wtds[i]["dh"]
+					}
 				}
 			     var $subBox = $("input[name='subBox']")
 			     $subBox.click(function(){
