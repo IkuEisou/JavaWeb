@@ -36,7 +36,7 @@ $(function(){
 				}else{
 					for(var i=0; i < wtds.length; i++){				
 						wh = wtds[i]["wh"]
-						srhaqf(wh,wtds[i]["fee"])
+						srhaqf(wh,wtds[i]["fee"],wtds[i]["jy"])
 						
 					}
 				}
@@ -67,7 +67,7 @@ $(function(){
      });
 });
 
-function srhaqf(wh,fe){
+function srhaqf(wh,fe,jyy){
 	var dw = $("#dw").find("option:selected").text()
 	var page = $.getUrlVar('page')
 	var usrs
@@ -91,69 +91,75 @@ function srhaqf(wh,fe){
 		success: function(res){
 			usrs = res.usrs
 			jy = '<select>'
+			jy += '<option>'+jyy+'</option>'
 			for(var i=0; i < usrs.length; i++){
-				jy += '<option>'+usrs[i]["real"]+'</option>'
+				if(usrs[i]["real"] != jyy){
+					jy += '<option>'+usrs[i]["real"]+'</option>'
+				}
 			}
 			jy += '</select>'
-		}
-	});
-	$.ajax({
-		type: 'POST',
-		url: 'AqfServlet',
-		dataType: 'json',
-		data: {
-			flag:"srh",
-			xh:"",
-			wh:wh,
-			name:"",
-			dw:dw,
-			zt:"",
-			page: page
-		},
-		error: function(xhr, err){
-			alert('Error：' + err + '！')
-		},
-		success: function(res){
-			var aqfs = res.aqfs
-			if(res.pages == "0"){
-				alert(aqfs)
-			}else{
-				$("#aqftb").empty()
-				$("#nav").empty()
-				$('#aqftb').after('<div id="nav"></div>')
-				var rowsShown = 5
-				var rowsTotal = res.pages
-				var numPages = Math.ceil(rowsTotal/rowsShown)
-				
-				for(i = 0;i<numPages;i++) {
-					var pageNum = i + 1
-					$('#nav').append('<a href="aqf.html?page='+pageNum+'"'+' rel="'+i+'">'+pageNum+'</a> ')
+
+			$.ajax({
+				type: 'POST',
+				url: 'AqfServlet',
+				dataType: 'json',
+				data: {
+					flag:"srh",
+					xh:"",
+					wh:wh,
+					name:"",
+					dw:dw,
+					zt:"",
+					page: page
+				},
+				error: function(xhr, err){
+					alert('Error：' + err + '！')
+				},
+				success: function(res){
+					var aqfs = res.aqfs
+					if(res.pages == "0"){
+						alert(aqfs)
+					}else{
+						if($("title")[0].innerHTML != "修改委托单"){
+							$("#aqftb").empty()
+						}
+						$("#nav").empty()
+						$('#aqftb').after('<div id="nav"></div>')
+						var rowsShown = 5
+						var rowsTotal = res.pages
+						var numPages = Math.ceil(rowsTotal/rowsShown)
+						
+						for(i = 0;i<numPages;i++) {
+							var pageNum = i + 1
+							$('#nav').append('<a href="aqf.html?page='+pageNum+'"'+' rel="'+i+'">'+pageNum+'</a> ')
+						}
+						
+						for(var i=0; i < aqfs.length; i++){
+							var aqf = '<tr><td><input type="checkbox" name="subBox"  id=cb"'+i+'"></td>'+
+							'<td>'+(i+1)+'</td>'+
+							'<td>'+aqfs[i]["wh"]+'</td>'+
+							'<td>'+aqfs[i]["xh"]+'</td>'+
+							'<td>'+aqfs[i]["name"]+'</td>'+
+							'<td>'+aqfs[i]["dw"]+'</td>'+
+							'<td>'+aqfs[i]["tj"]+'</td>'+
+							'<td>'+aqfs[i]["gzjz"]+'</td>'+
+							'<td>'+aqfs[i]["gzyl"]+'</td>'+
+							'<td>'+aqfs[i]["zdyl"]+'</td>'+
+							'<td>'+aqfs[i]["fsdm"]+'</td>'+
+							'<td>'+aqfs[i]["azwz"]+'</td>'+
+							'<td>'+aqfs[i]["zt"]+'</td>'+
+							'<td>'+jy+'</td>'+
+							'<td>'+fee+'</td>'+
+							'</tr>'
+							$("#aqftb").append(aqf)
+						}
+					     var $subBox = $("input[name='subBox']")
+					     $subBox.click(function(){
+					         $("#checkAll").attr("checked",$subBox.length == $("input[name='subBox']:checked").length ? true : false)
+					     });
+					}
 				}
-				
-				for(var i=0; i < aqfs.length; i++){
-					var aqf = '<tr><td><input type="checkbox" name="subBox"  id=cb"'+i+'"></td>'+
-					'<td>'+(i+1)+'</td>'+
-					'<td>'+aqfs[i]["wh"]+'</td>'+
-					'<td>'+aqfs[i]["xh"]+'</td>'+
-					'<td>'+aqfs[i]["name"]+'</td>'+
-					'<td>'+aqfs[i]["dw"]+'</td>'+
-					'<td>'+aqfs[i]["tj"]+'</td>'+
-					'<td>'+aqfs[i]["gzjz"]+'</td>'+
-					'<td>'+aqfs[i]["gzyl"]+'</td>'+
-					'<td>'+aqfs[i]["zdyl"]+'</td>'+
-					'<td>'+aqfs[i]["fsdm"]+'</td>'+
-					'<td>'+aqfs[i]["azwz"]+'</td>'+
-					'<td>'+aqfs[i]["zt"]+'</td>'+
-					'<td>'+jy+'</td>'+
-					'<td>'+fee+'</td>'+
-					'</tr>'
-					$("#aqftb").append(aqf)
-				}
-			     var $subBox = $("input[name='subBox']")
-			     $subBox.click(function(){
-			         $("#checkAll").attr("checked",$subBox.length == $("input[name='subBox']:checked").length ? true : false)
-			     });
-			}
+			});
 		}
 	});
 }
